@@ -12,6 +12,7 @@ using ESRI.ArcGIS.SystemUI;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.DataSourcesFile;
 using ESRI.ArcGIS.DataSourcesRaster;
+using ESRI.ArcGIS.Controls;
 namespace AEdemo1
 {
     public partial class Form1 : Form
@@ -21,7 +22,15 @@ namespace AEdemo1
             InitializeComponent();
         }
 
-        private void bt_LocalMxFile1(object sender, EventArgs e)
+        #region 打开mxd
+        private void mAEOpenMxd_Click(object sender, EventArgs e)
+        {
+            ICommand command = new ControlsOpenDocCommandClass();
+            command.OnCreate(mainMapControl.Object);
+            command.OnClick();
+        }
+
+        private void mLoadMxd_Click(object sender, EventArgs e)
         {
             OpenFileDialog pOpenFileDialog = new OpenFileDialog();
             pOpenFileDialog.CheckFileExists = true;
@@ -49,7 +58,7 @@ namespace AEdemo1
             }
         }
 
-        private void bt_mapDocu_Click(object sender, EventArgs e)
+        private void mMapDocu_Click(object sender, EventArgs e)
         {
             OpenFileDialog pOpenFileDialog = new OpenFileDialog();
             pOpenFileDialog.CheckFileExists = true;
@@ -72,7 +81,7 @@ namespace AEdemo1
                     //获取map中激活的地图文档
                     mainMapControl.Map = pMapDocument.ActiveView.FocusMap;
                     mainMapControl.ActiveView.Refresh();
-                   
+
 
                 }
                 else
@@ -82,66 +91,12 @@ namespace AEdemo1
                 }
             }
         }
+        #endregion
 
-        private void bt_controlopen_Click(object sender, EventArgs e)
-        {
-            
-        }
 
-        private void bt_WorkSpaceLoad_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog pOpenFileDialog = new OpenFileDialog();
-            pOpenFileDialog.CheckFileExists = true;
-            pOpenFileDialog.Title = "打开地图文档";
-            pOpenFileDialog.Filter = "shp文档（*.shp）|*.shp";
-            pOpenFileDialog.Multiselect = false;
-            pOpenFileDialog.RestoreDirectory = true;
-            pOpenFileDialog.ShowDialog();
-            string pFullPath = pOpenFileDialog.FileName;
-            //获取文件路径
-            IWorkspaceFactory pWorkspaceFactory;
-            IFeatureWorkspace pFeatureWorkspace;
-            IFeatureLayer pFeatureLayer;//提供操作图层的属性和方法
-           
-            if (pFullPath == "")
-            {
-                return;
-            }
-            else {
-                int pIndex = pFullPath.LastIndexOf("\\");//D:\aelearning\shp\，在17位
-                string pFilePath = pFullPath.Substring(0,pIndex); //0-17位是文件路径
-                string pFileName = pFullPath.Substring(pIndex+1);//18到最后是文件的名
-                //实例化shapefileworkspacefactory（）
-                pWorkspaceFactory = new ShapefileWorkspaceFactory();//创建shape文件的工作工厂
-                pFeatureWorkspace = (IFeatureWorkspace)pWorkspaceFactory.OpenFromFile(pFilePath,0);
-                //创建并实例化要素集
-                IFeatureClass pFeatureClass = pFeatureWorkspace.OpenFeatureClass(pFileName);
-                pFeatureLayer = new FeatureLayer();
-                pFeatureLayer.FeatureClass = pFeatureClass;
-                pFeatureLayer.Name = pFeatureLayer.FeatureClass.AliasName;
-                mainMapControl.Map.AddLayer(pFeatureLayer);
-                mainMapControl.ActiveView.Refresh();
-                MessageBox.Show(pIndex.ToString());
-            }
-        }
 
-        private void bt_addshpfile_Click(object sender, EventArgs e)
-        {
-            OpenFileDialog pOpenFileDialog = new OpenFileDialog();
-            pOpenFileDialog.CheckFileExists = true;
-            pOpenFileDialog.Title = "打开地图文档";
-            pOpenFileDialog.Filter = "shp文档（*.shp）|*.shp";
-            pOpenFileDialog.Multiselect = false;
-            pOpenFileDialog.RestoreDirectory = true;
-            pOpenFileDialog.ShowDialog();
-            string pFullPath = pOpenFileDialog.FileName;
-            int pIndex = pFullPath.LastIndexOf("\\");//D:\aelearning\shp\，在17位
-            string pFilePath = pFullPath.Substring(0, pIndex); //0-17位是文件路径
-            string pFileName = pFullPath.Substring(pIndex + 1);//18到最后是文件的名
-            mainMapControl.AddShapeFile(pFilePath,pFileName);
-        }
-
-        private void bt_addRaster_Click(object sender, EventArgs e)
+        #region 打开栅格
+        private void mOpenRaster_Click(object sender, EventArgs e)
         {
             OpenFileDialog pOpenFileDialog = new OpenFileDialog();
             pOpenFileDialog.CheckFileExists = true;
@@ -155,34 +110,155 @@ namespace AEdemo1
             {
                 return;
             }
-            else {
+            else
+            {
                 string pPath = System.IO.Path.GetDirectoryName(PRasterFileName);
                 string pFileName = System.IO.Path.GetFileName(PRasterFileName);
                 IWorkspaceFactory pWorkspaceFactory = new RasterWorkspaceFactory();
-                IWorkspace pWorkspace = pWorkspaceFactory.OpenFromFile(pPath,0);
-                IRasterWorkspace pRasterWorkspace = pWorkspace as IRasterWorkspace;
-                IRasterDataset pRasterDataset = pRasterWorkspace.OpenRasterDataset(pFileName);
+                IWorkspace pWorkspace = pWorkspaceFactory.OpenFromFile(pPath, 0);
+                IRasterWorkspace pRasterWorkspace = (IRasterWorkspace)pWorkspace; //将工作空间类转换成栅格空间
+                IRasterDataset pRasterDataset = pRasterWorkspace.OpenRasterDataset(pFileName);//从栅格空间打开栅格数据集提供对控制光栅数据集的成员的访问
                 //影像金字塔判断与创建
                 IRasterPyramid3 pRasPyrmid = pRasterDataset as IRasterPyramid3;
                 if (pRasPyrmid != null)
                 {
-                    if (!(pRasPyrmid.Present)) {
+                    if (!(pRasPyrmid.Present))
+                    {
                         pRasPyrmid.Create();//创建金字塔
                     }
                 }
-                IRaster pRaster;
-                pRaster = pRasterDataset.CreateDefaultRaster();
-                IRasterLayer pRasterLayer;
-                pRasterLayer = new RasterLayerClass();
-                pRasterLayer.CreateFromRaster(pRaster);
-                ILayer pLayer = pRasterLayer as ILayer;
-                mainMapControl.AddLayer(pLayer,0);
+                IRaster pRaster = pRasterDataset.CreateDefaultRaster();//创建一个带有该数据集的默认属性的光栅对象
+                IRasterLayer pRasterLayer = new RasterLayerClass();//光栅层源和显示选项。
+                pRasterLayer.CreateFromRaster(pRaster);//从已有的栅格对象创建图层
+                ILayer pLayer = pRasterLayer as ILayer;//将栅格图层转换成图层
+                mainMapControl.AddLayer(pLayer, 0);
+            }
+        }
+        #endregion
 
+        #region 打开shp
+        private void mAddShp_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog pOpenFileDialog = new OpenFileDialog();
+            pOpenFileDialog.CheckFileExists = true;
+            pOpenFileDialog.Title = "打开地图文档";
+            pOpenFileDialog.Filter = "shp文档（*.shp）|*.shp";
+            pOpenFileDialog.Multiselect = false;
+            pOpenFileDialog.RestoreDirectory = true;
+            pOpenFileDialog.ShowDialog();
+            string pFullPath = pOpenFileDialog.FileName;
+            int pIndex = pFullPath.LastIndexOf("\\");//D:\aelearning\shp\，在17位
+            string pFilePath = pFullPath.Substring(0, pIndex); //0-17位是文件路径
+            string pFileName = pFullPath.Substring(pIndex + 1);//18到最后是文件的名
+            mainMapControl.AddShapeFile(pFilePath, pFileName);
+        }
 
+        private void mAddShpByWorkSpace_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog pOpenFileDialog = new OpenFileDialog();
+            pOpenFileDialog.CheckFileExists = true;
+            pOpenFileDialog.Title = "打开地图文档";
+            pOpenFileDialog.Filter = "shp文档（*.shp）|*.shp";
+            pOpenFileDialog.Multiselect = false;
+            pOpenFileDialog.RestoreDirectory = true;
+            pOpenFileDialog.ShowDialog();
+            string pFullPath = pOpenFileDialog.FileName;
+            //获取文件路径
+            IWorkspaceFactory pWorkspaceFactory;
+            IFeatureWorkspace pFeatureWorkspace;
+            IFeatureLayer pFeatureLayer;//提供操作图层的属性和方法
+
+            if (pFullPath == "")
+            {
+                return;
+            }
+            else
+            {
+                int pIndex = pFullPath.LastIndexOf("\\");//D:\aelearning\shp\，在17位
+                string pFilePath = pFullPath.Substring(0, pIndex); //0-17位是文件路径
+                string pFileName = pFullPath.Substring(pIndex + 1);//18到最后是文件的名
+                //实例化shapefileworkspacefactory（）
+                pWorkspaceFactory = new ShapefileWorkspaceFactory();//创建shape文件的工作工厂
+                pFeatureWorkspace = (IFeatureWorkspace)pWorkspaceFactory.OpenFromFile(pFilePath, 0);
+                //创建并实例化要素集
+                IFeatureClass pFeatureClass = pFeatureWorkspace.OpenFeatureClass(pFileName);
+                pFeatureLayer = new FeatureLayer();
+                pFeatureLayer.FeatureClass = pFeatureClass;
+                pFeatureLayer.Name = pFeatureLayer.FeatureClass.AliasName;
+                mainMapControl.Map.AddLayer(pFeatureLayer);
+                mainMapControl.ActiveView.Refresh();
+                MessageBox.Show(pIndex.ToString());
+            }
+        }
+        #endregion
+
+        #region 保存
+        private void mSaveAsMap_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog pSaveFileDialog = new SaveFileDialog();//保存框
+            pSaveFileDialog.Title = "请选择保存路径";
+            pSaveFileDialog.OverwritePrompt = true;
+            pSaveFileDialog.Filter = "arcmap文档（*.mxd）|*.mxd";
+            pSaveFileDialog.RestoreDirectory = true;
+            if (pSaveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                string sFilePath = pSaveFileDialog.FileName;
+                IMapDocument pMapDocument = new MapDocumentClass();
+                pMapDocument.New(sFilePath);
+                pMapDocument.ReplaceContents(mainMapControl.Map as IMxdContents);
+                pMapDocument.Save(true, true);
+                pMapDocument.Close();
+            }
+            else
+            {
 
             }
         }
 
+        private void mSaveMap_Click(object sender, EventArgs e)
+        {
+            string sMxdFileName = mainMapControl.DocumentFilename;
+            IMapDocument pMapDocument = new MapDocumentClass(); //提供对控制地图文档文件的读取和写入的成员的访问。
+            if (sMxdFileName != null && mainMapControl.CheckMxFile(sMxdFileName))//checkmxfile检查指定的文件名，看它是不是一个可以装载到MapControl的映射文档。
+            {
+                if (pMapDocument.get_IsReadOnly(sMxdFileName))
+                {
+                    MessageBox.Show("本地图文档是只读的，不能保存");
+                    pMapDocument.Close();
+                    return;
+                }
+            }
+            else
+            {
+                SaveFileDialog pSaveFileDialog = new SaveFileDialog();//保存框
+                pSaveFileDialog.Title = "请选择保存路径";
+                pSaveFileDialog.OverwritePrompt = true;
+                pSaveFileDialog.Filter = "arcmap文档（*.mxd）|*.mxd";
+                pSaveFileDialog.RestoreDirectory = true;
+                if (pSaveFileDialog.ShowDialog() == DialogResult.OK)
+                {
+                    sMxdFileName = pSaveFileDialog.FileName;//获取到所选文件的名称
+                    pMapDocument.New(sMxdFileName);//创建并打开一个新的映射文档(文件名)。
+                    //将地图控件里的地图映射为imxdcontents内容，将mapdocument中的内容用imxdcontents取代
+                    pMapDocument.ReplaceContents(mainMapControl.Map as IMxdContents);//替换映射文档的内容|提供对成员的访问，以便将数据从MXD映射文档文件中传递出去。实现该接口的co类可以在需要的情况下将实现限制为一个属性。
+                    pMapDocument.Save(pMapDocument.UsesRelativePaths, true);//save将映射文档的内容保存到绑定文件中。||UsesRelativePaths()表示映射文档中的数据是使用相对路径引用
+                    pMapDocument.Close();
+                    MessageBox.Show("保存文档成功");
+                }
+                else
+                {
+                    return;
+                }
+            }
+        }
 
+        private void mAESaveMap_Click(object sender, EventArgs e)
+        {
+            ICommand command = new ControlsSaveAsDocCommandClass();
+            command.OnCreate(mainMapControl.Object);
+            command.OnClick();
+            MessageBox.Show("ok");
+        }
+        #endregion
     }
 }
