@@ -30,7 +30,6 @@ namespace AEdemo1
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
-            this.mainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.打开ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.打开mxdToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -41,16 +40,23 @@ namespace AEdemo1
             this.mAddShpByWorkSpace = new System.Windows.Forms.ToolStripMenuItem();
             this.mAddShp = new System.Windows.Forms.ToolStripMenuItem();
             this.mOpenRaster = new System.Windows.Forms.ToolStripMenuItem();
+            this.mOpenAccess = new System.Windows.Forms.ToolStripMenuItem();
             this.保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mSaveMap = new System.Windows.Forms.ToolStripMenuItem();
             this.mSaveAsMap = new System.Windows.Forms.ToolStripMenuItem();
             this.mAESaveMap = new System.Windows.Forms.ToolStripMenuItem();
             this.缩放ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.放大ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.缩小ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mZoomIn = new System.Windows.Forms.ToolStripMenuItem();
+            this.mZoomOut = new System.Windows.Forms.ToolStripMenuItem();
+            this.mRZoomIn = new System.Windows.Forms.ToolStripMenuItem();
+            this.mRZoomOut = new System.Windows.Forms.ToolStripMenuItem();
+            this.mainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
+            this.mOpenFileData = new System.Windows.Forms.ToolStripMenuItem();
+            this.mOpenTxt = new System.Windows.Forms.ToolStripMenuItem();
+            this.button1 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).BeginInit();
             this.menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).BeginInit();
             this.SuspendLayout();
             // 
             // axLicenseControl1
@@ -61,14 +67,6 @@ namespace AEdemo1
             this.axLicenseControl1.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axLicenseControl1.OcxState")));
             this.axLicenseControl1.Size = new System.Drawing.Size(32, 32);
             this.axLicenseControl1.TabIndex = 0;
-            // 
-            // mainMapControl
-            // 
-            this.mainMapControl.Location = new System.Drawing.Point(149, 28);
-            this.mainMapControl.Name = "mainMapControl";
-            this.mainMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("mainMapControl.OcxState")));
-            this.mainMapControl.Size = new System.Drawing.Size(1070, 507);
-            this.mainMapControl.TabIndex = 2;
             // 
             // menuStrip1
             // 
@@ -87,7 +85,10 @@ namespace AEdemo1
             this.打开ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.打开mxdToolStripMenuItem,
             this.打开shpToolStripMenuItem,
-            this.mOpenRaster});
+            this.mOpenRaster,
+            this.mOpenAccess,
+            this.mOpenFileData,
+            this.mOpenTxt});
             this.打开ToolStripMenuItem.Name = "打开ToolStripMenuItem";
             this.打开ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.打开ToolStripMenuItem.Text = "打开";
@@ -99,7 +100,7 @@ namespace AEdemo1
             this.mLoadMxd,
             this.mMapDocu});
             this.打开mxdToolStripMenuItem.Name = "打开mxdToolStripMenuItem";
-            this.打开mxdToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.打开mxdToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.打开mxdToolStripMenuItem.Text = "打开mxd";
             // 
             // mAEOpenMxd
@@ -129,7 +130,7 @@ namespace AEdemo1
             this.mAddShpByWorkSpace,
             this.mAddShp});
             this.打开shpToolStripMenuItem.Name = "打开shpToolStripMenuItem";
-            this.打开shpToolStripMenuItem.Size = new System.Drawing.Size(125, 22);
+            this.打开shpToolStripMenuItem.Size = new System.Drawing.Size(160, 22);
             this.打开shpToolStripMenuItem.Text = "打开shp";
             // 
             // mAddShpByWorkSpace
@@ -149,9 +150,16 @@ namespace AEdemo1
             // mOpenRaster
             // 
             this.mOpenRaster.Name = "mOpenRaster";
-            this.mOpenRaster.Size = new System.Drawing.Size(125, 22);
+            this.mOpenRaster.Size = new System.Drawing.Size(160, 22);
             this.mOpenRaster.Text = "打开栅格";
             this.mOpenRaster.Click += new System.EventHandler(this.mOpenRaster_Click);
+            // 
+            // mOpenAccess
+            // 
+            this.mOpenAccess.Name = "mOpenAccess";
+            this.mOpenAccess.Size = new System.Drawing.Size(160, 22);
+            this.mOpenAccess.Text = "打开个人数据库";
+            this.mOpenAccess.Click += new System.EventHandler(this.mOpenAccess_Click);
             // 
             // 保存ToolStripMenuItem
             // 
@@ -187,29 +195,80 @@ namespace AEdemo1
             // 缩放ToolStripMenuItem
             // 
             this.缩放ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.放大ToolStripMenuItem,
-            this.缩小ToolStripMenuItem});
+            this.mZoomIn,
+            this.mZoomOut,
+            this.mRZoomIn,
+            this.mRZoomOut});
             this.缩放ToolStripMenuItem.Name = "缩放ToolStripMenuItem";
             this.缩放ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.缩放ToolStripMenuItem.Text = "缩放";
             // 
-            // 放大ToolStripMenuItem
+            // mZoomIn
             // 
-            this.放大ToolStripMenuItem.Name = "放大ToolStripMenuItem";
-            this.放大ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.放大ToolStripMenuItem.Text = "放大";
+            this.mZoomIn.Name = "mZoomIn";
+            this.mZoomIn.Size = new System.Drawing.Size(124, 22);
+            this.mZoomIn.Text = "放大";
+            this.mZoomIn.Click += new System.EventHandler(this.mZoomIn_Click);
             // 
-            // 缩小ToolStripMenuItem
+            // mZoomOut
             // 
-            this.缩小ToolStripMenuItem.Name = "缩小ToolStripMenuItem";
-            this.缩小ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
-            this.缩小ToolStripMenuItem.Text = "缩小";
+            this.mZoomOut.Name = "mZoomOut";
+            this.mZoomOut.Size = new System.Drawing.Size(124, 22);
+            this.mZoomOut.Text = "缩小";
+            this.mZoomOut.Click += new System.EventHandler(this.mZoomOut_Click);
+            // 
+            // mRZoomIn
+            // 
+            this.mRZoomIn.Name = "mRZoomIn";
+            this.mRZoomIn.Size = new System.Drawing.Size(124, 22);
+            this.mRZoomIn.Text = "拉框放大";
+            this.mRZoomIn.Click += new System.EventHandler(this.mRZoomIn_Click);
+            // 
+            // mRZoomOut
+            // 
+            this.mRZoomOut.Name = "mRZoomOut";
+            this.mRZoomOut.Size = new System.Drawing.Size(124, 22);
+            this.mRZoomOut.Text = "拉框缩小";
+            this.mRZoomOut.Click += new System.EventHandler(this.mRZoomOut_Click);
+            // 
+            // mainMapControl
+            // 
+            this.mainMapControl.Location = new System.Drawing.Point(149, 28);
+            this.mainMapControl.Name = "mainMapControl";
+            this.mainMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("mainMapControl.OcxState")));
+            this.mainMapControl.Size = new System.Drawing.Size(1070, 507);
+            this.mainMapControl.TabIndex = 2;
+            // 
+            // mOpenFileData
+            // 
+            this.mOpenFileData.Name = "mOpenFileData";
+            this.mOpenFileData.Size = new System.Drawing.Size(160, 22);
+            this.mOpenFileData.Text = "打开文件数据库";
+            this.mOpenFileData.Click += new System.EventHandler(this.mOpenFileData_Click);
+            // 
+            // mOpenTxt
+            // 
+            this.mOpenTxt.Name = "mOpenTxt";
+            this.mOpenTxt.Size = new System.Drawing.Size(160, 22);
+            this.mOpenTxt.Text = "加载txt文件";
+            this.mOpenTxt.Click += new System.EventHandler(this.mOpenTxt_Click);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(33, 147);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 14;
+            this.button1.Text = "button1";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1231, 547);
+            this.Controls.Add(this.button1);
             this.Controls.Add(this.mainMapControl);
             this.Controls.Add(this.axLicenseControl1);
             this.Controls.Add(this.menuStrip1);
@@ -217,9 +276,9 @@ namespace AEdemo1
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -238,14 +297,20 @@ namespace AEdemo1
         private System.Windows.Forms.ToolStripMenuItem mSaveMap;
         private System.Windows.Forms.ToolStripMenuItem mSaveAsMap;
         private System.Windows.Forms.ToolStripMenuItem 缩放ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 放大ToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem 缩小ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mZoomOut;
         private System.Windows.Forms.ToolStripMenuItem mAESaveMap;
         private System.Windows.Forms.ToolStripMenuItem mAddShpByWorkSpace;
         private System.Windows.Forms.ToolStripMenuItem mAddShp;
         private System.Windows.Forms.ToolStripMenuItem mAEOpenMxd;
         private System.Windows.Forms.ToolStripMenuItem mLoadMxd;
         private System.Windows.Forms.ToolStripMenuItem mMapDocu;
+        private System.Windows.Forms.ToolStripMenuItem mZoomIn;
+        private System.Windows.Forms.ToolStripMenuItem mRZoomIn;
+        private System.Windows.Forms.ToolStripMenuItem mRZoomOut;
+        private System.Windows.Forms.ToolStripMenuItem mOpenAccess;
+        private System.Windows.Forms.ToolStripMenuItem mOpenFileData;
+        private System.Windows.Forms.ToolStripMenuItem mOpenTxt;
+        private System.Windows.Forms.Button button1;
     }
 }
 

@@ -13,6 +13,9 @@ using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.DataSourcesFile;
 using ESRI.ArcGIS.DataSourcesRaster;
 using ESRI.ArcGIS.Controls;
+using ESRI.ArcGIS.Geometry;
+using ESRI.ArcGIS.DataSourcesGDB;
+using System.IO;
 namespace AEdemo1
 {
     public partial class Form1 : Form
@@ -22,6 +25,7 @@ namespace AEdemo1
             InitializeComponent();
         }
 
+        #region 打开菜单
         #region 打开mxd
         private void mAEOpenMxd_Click(object sender, EventArgs e)
         {
@@ -192,6 +196,122 @@ namespace AEdemo1
         }
         #endregion
 
+
+        private void mOpenAccess_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog pOpenFileDialog = new OpenFileDialog();
+            pOpenFileDialog.Filter = "个人数据库（*.mdb）|*.mdb";
+            pOpenFileDialog.Title = "打开个人地理数据库";
+            pOpenFileDialog.ShowDialog();
+            string pFullPath = pOpenFileDialog.FileName;
+            if (pFullPath == "")
+            {
+                return;
+            }
+            else
+            {
+                IWorkspaceFactory pAccessWorkspaceFactory = new AccessWorkspaceFactory();
+                //获取工作空间
+                IWorkspace pWorkspace = pAccessWorkspaceFactory.OpenFromFile(pFullPath, 0);
+                //加载工作空间里的数据
+                AddAllDataset(pWorkspace, mainMapControl);
+            }
+        }
+
+        private void mOpenFileData_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dlg = new FolderBrowserDialog();
+            if (dlg.ShowDialog() != DialogResult.OK) {
+                return;
+            }
+            string pFullPath = dlg.SelectedPath;
+            if (pFullPath == "") {
+                return;
+            }
+            IWorkspaceFactory pFileGDBFactory = new FileGDBWorkspaceFactoryClass();
+            IWorkspace pWorkspace = pFileGDBFactory.OpenFromFile(pFullPath,0);
+            AddAllDataset(pWorkspace, mainMapControl);
+        }
+
+        /// <summary>
+        /// 加载工作空间中的数据方法,对（文件地理数据库，arcsde空间数据库）加载时直接调用
+        /// </summary>
+        /// 
+        private void AddAllDataset(IWorkspace pWorkspace, AxMapControl mapControl)
+        {
+            //提供对通过数据集进行枚举的成员的访问。
+            IEnumDataset pEnumDataset = pWorkspace.get_Datasets(ESRI.ArcGIS.Geodatabase.esriDatasetType.esriDTAny);//数据类型为任何数据集
+            pEnumDataset.Reset();//将枚举序列重新设置为开始
+            IDataset pDataset = pEnumDataset.Next();//在枚举序列中检索下一个数据集。将enum数据集中的数据一个一个地读到dataset中
+            while (pDataset != null)
+            {
+                //如果是要素数据集
+                if (pDataset is IFeatureDataset)
+                {
+                    IFeatureWorkspace pFeatureWorkspace = (IFeatureWorkspace)pWorkspace;
+                    //从要素空间中打开要素数据集
+                    IFeatureDataset pFeatureDataset = pFeatureWorkspace.OpenFeatureDataset(pDataset.Name);
+                    //这个数据集中包含的数据集
+                    IEnumDataset pEnumDataset1 = pFeatureDataset.Subsets;
+                    pEnumDataset1.Reset();
+                    IGroupLayer pGroupLayer = new GroupLayerClass();//提供对成员的访问，这些成员控制着一组层，这些层的行为类似于一个层。
+                    pGroupLayer.Name = pFeatureDataset.Name;
+                    IDataset pDataset1 = pEnumDataset1.Next();
+                    while (pDataset1 != null)
+                    {
+                        if (pDataset1 is IFeatureClass)//要素类
+                        {
+                            //提供对基于向量地理数据的层的属性和方法的访问，这通常是一个地理数据库、shapefile或覆盖率特性类。
+                            IFeatureLayer pFeatureLayer = new FeatureLayerClass();
+                            pFeatureLayer.FeatureClass = pFeatureWorkspace.OpenFeatureClass(pDataset1.Name);
+                            if (pFeatureLayer.FeatureClass != null)
+                            {
+                                pFeatureLayer.Name = pFeatureLayer.FeatureClass.AliasName;//要素类的名称
+                                pGroupLayer.Add(pFeatureLayer);
+                                mapControl.Map.AddLayer(pFeatureLayer);
+                            }
+                        }
+                        pDataset1 = pEnumDataset1.Next();//指针指向下一个数据集
+                    }
+                }
+                //如果是要素类
+                else if (pDataset is IFeatureClass)
+                {
+                    IFeatureWorkspace pFeatureWorkspace = (IFeatureWorkspace)pWorkspace;
+                    IFeatureLayer pFeatureLayer = new FeatureLayerClass();
+                    pFeatureLayer.FeatureClass = pFeatureWorkspace.OpenFeatureClass(pDataset.Name);
+                    pFeatureLayer.Name = pFeatureLayer.FeatureClass.AliasName;
+                    mapControl.Map.AddLayer(pFeatureLayer);
+                }
+                //如果是栅格数据集
+                else if (pDataset is IRasterDataset)
+                {
+                    IRasterWorkspace pRasterWorkspace = (IRasterWorkspace)pWorkspace;
+                    IRasterDataset pRasterDataset = pRasterWorkspace.OpenRasterDataset(pDataset.Name);
+                    //影像金子塔的判断与创立
+                    IRasterPyramid pRasterPyramid = pRasterDataset as IRasterPyramid3;
+                    if (pRasterPyramid != null && !(pRasterPyramid.Present))
+                    {
+                        pRasterPyramid.Create();
+                    }
+                    IRasterLayer pRasterLayer = new RasterLayerClass();
+                    pRasterLayer.CreateFromDataset(pRasterDataset);//栅格图层从栅格数据集中创建
+                    mapControl.AddLayer(pRasterLayer, 0);
+                }
+                pDataset = pEnumDataset.Next();
+            }
+            mapControl.ActiveView.Refresh();
+
+
+
+        }
+
+ #endregion
+     
+
+       
+
+
         #region 保存
         private void mSaveAsMap_Click(object sender, EventArgs e)
         {
@@ -260,5 +380,78 @@ namespace AEdemo1
             MessageBox.Show("ok");
         }
         #endregion
+
+
+        #region 缩放
+        private void mZoomIn_Click(object sender, EventArgs e)
+        {
+            //包络线接口，获取图形的最小外接矩形
+            IEnvelope pEnvelope = mainMapControl.Extent;//地图单位当前的地图范围。
+            pEnvelope.Expand(0.5, 0.5, true);//放大2倍
+            mainMapControl.Extent = pEnvelope;//将地图的范围修改为 扩大后的范围
+            mainMapControl.ActiveView.Refresh();//重新绘制地图
+            double max = pEnvelope.XMax;
+            MessageBox.Show(max.ToString());
+        }
+
+        private void mZoomOut_Click(object sender, EventArgs e)
+        {
+            //包络线接口，获取图形的最小外接矩形
+            IEnvelope pEnvelope = mainMapControl.Extent;//地图单位当前的地图范围。
+            pEnvelope.Expand(1.5, 1.5, true);//放大2倍
+            mainMapControl.Extent = pEnvelope;//将地图的范围修改为 扩大后的范围
+            mainMapControl.ActiveView.Refresh();//重新绘制地图
+        }
+
+
+        private void mRZoomIn_Click(object sender, EventArgs e)
+        {
+            IEnvelope pEnvelope = mainMapControl.TrackRectangle();//该方法在MapControl上触发鼠标点击事件，然后生成轨迹矩形
+            if (pEnvelope == null || pEnvelope.IsEmpty || pEnvelope.Height == 0 || pEnvelope.Width == 0)
+            {
+
+
+            }
+        }
+
+        private void mRZoomOut_Click(object sender, EventArgs e)
+        {
+
+        }
+        #endregion
+
+        #region 加载txt
+
+        
+      
+
+
+
+
+        #endregion
+
+
+
+
+
+
+
+
+
+
+        private void mOpenTxt_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+      
+
+
+
     }
 }
