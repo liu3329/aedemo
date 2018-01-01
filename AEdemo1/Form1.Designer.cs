@@ -291,21 +291,22 @@ namespace AEdemo1
             this.mMLength,
             this.mMAera});
             this.量测ToolStripMenuItem.Name = "量测ToolStripMenuItem";
-            this.量测ToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
+            this.量测ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.量测ToolStripMenuItem.Text = "量测";
             // 
             // mMLength
             // 
             this.mMLength.Name = "mMLength";
-            this.mMLength.Size = new System.Drawing.Size(100, 22);
+            this.mMLength.Size = new System.Drawing.Size(152, 22);
             this.mMLength.Text = "长度";
             this.mMLength.Click += new System.EventHandler(this.mMLength_Click);
             // 
             // mMAera
             // 
             this.mMAera.Name = "mMAera";
-            this.mMAera.Size = new System.Drawing.Size(100, 22);
+            this.mMAera.Size = new System.Drawing.Size(152, 22);
             this.mMAera.Text = "面积";
+            this.mMAera.Click += new System.EventHandler(this.mMAera_Click);
             // 
             // mainMapControl
             // 

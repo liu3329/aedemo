@@ -488,10 +488,13 @@ namespace AEdemo1
         private IPoint pPointPt = null;//鼠标点击点
         private IPoint pMovePT = null;//鼠标移动时的当前点
         private INewLineFeedback pNewLineFeedback;//追踪线对象
+        private INewPolygonFeedback pNewPolygonFeedback;//追踪面对想
         private double dToltalLength = 0;//量测总长度
         private double dSegmentLength = 0;//片段距离
-        private string pMouseOperate;
-        private string sMapUnits ;
+        private string pMouseOperate;//测量的种类
+        private string sMapUnits;//测量单位存储
+        double area;
+        private IPointCollection pAreaPointCol = new MultipointClass();//对面积测量时画的点进行存储，，点的集合存储
         private void mMLength_Click(object sender, EventArgs e)
         {
             mainMapControl.CurrentTool = null;
@@ -499,6 +502,14 @@ namespace AEdemo1
             mainMapControl.MousePointer = esriControlsMousePointer.esriPointerCrosshair;//鼠标指针显示在MapControl上。          
 
         }
+
+        private void mMAera_Click(object sender, EventArgs e)
+        {
+            mainMapControl.CurrentTool = null;
+            pMouseOperate = "MeasureArea";
+            mainMapControl.MousePointer = esriControlsMousePointer.esriPointerCrosshair;//地图获取指针
+        }
+
         /// <summary>
         /// 获取地图单位
         /// </summary>
@@ -557,7 +568,7 @@ namespace AEdemo1
             return sMapUnits;
         }
 
-        
+
 
         /// <summary>
         /// 点击地图事触发
@@ -589,12 +600,32 @@ namespace AEdemo1
                     dToltalLength = dToltalLength + dSegmentLength;
                     //MessageBox.Show(dToltalLength.ToString());
                 }
-            
+
             }
-          
+            if (e.button == 1 && pMouseOperate == "MeasureArea")
+            {
+                if (pNewPolygonFeedback == null)
+                {
+                    //实例化面对象
+                    pNewPolygonFeedback = new NewPolygonFeedback();
+                    pNewPolygonFeedback.Display = (mainMapControl.Map as IActiveView).ScreenDisplay;
+                    pAreaPointCol.RemovePoints(0, pAreaPointCol.PointCount);
+                    //开始绘制图形
+                    pNewPolygonFeedback.Start(pPointPt);
+                    pAreaPointCol.AddPoint(pPointPt);
+                }
+                else
+                {
+                    pNewPolygonFeedback.AddPoint(pPointPt);
+                    pAreaPointCol.AddPoint(pPointPt);
+                }
+
+            }
+
         }
 
-
+        IPointCollection pPointCol = new Polygon();//提供对多点、路径、环、多线、多边形、三角帆、三角线或多块的点的访问权
+      
         /// <summary>
         /// 当鼠标移动时触发
         /// </summary>
@@ -604,8 +635,8 @@ namespace AEdemo1
         {
             //将移动后的屏幕坐标点转换为地图坐标点
             pMovePT = (mainMapControl.Map as IActiveView).ScreenDisplay.DisplayTransformation.ToMapPoint(e.x, e.y);
-           
-            if (pMouseOperate == "MeasureLength") 
+
+            if (pMouseOperate == "MeasureLength")
             {
                 if (pNewLineFeedback != null) //如果有点
                 {
@@ -613,15 +644,27 @@ namespace AEdemo1
                 }
                 double deltaX = 0;//两点之间的x差值
                 double deltaY = 0; //两点之间的y差值
-                if((pPointPt != null)&&(pNewLineFeedback != null))
+                if ((pPointPt != null) && (pNewLineFeedback != null))
                 {
                     deltaX = pMovePT.X - pPointPt.X; //获取新的点值----前一个点的x值
                     deltaY = pMovePT.Y - pPointPt.Y;
                     //两个点的距离长度
-                    dSegmentLength = Math.Round(Math.Sqrt((deltaX * deltaX)*(deltaY * deltaY)),3);
+                    dSegmentLength = Math.Round(Math.Sqrt((deltaX * deltaX) * (deltaY * deltaY)), 3);
                     dToltalLength = dToltalLength + dSegmentLength;
                     //MessageBox.Show(dToltalLength.ToString());
                 }
+            }
+            else if (pMouseOperate == "MeasureArea")
+            {
+                if (pNewPolygonFeedback != null) {
+                    pNewPolygonFeedback.MoveTo(pMovePT);
+                }
+                for (int i = 0; i < pAreaPointCol.PointCount - 1; i++)
+                {
+                    pPointCol.AddPoint(pAreaPointCol.get_Point(i));//将点集合添加到多边形集和中
+                }
+                pPointCol.AddPoint(pMovePT);//再添加新移动到的点
+               
             }
         }
         /// <summary>
@@ -631,7 +674,7 @@ namespace AEdemo1
         /// <param name="e"></param>
         private void mainMapControl_OnDoubleClick(object sender, IMapControlEvents2_OnDoubleClickEvent e)
         {
-            switch (pMouseOperate) 
+            switch (pMouseOperate)
             {
                 case "MeasureLength":
                     if (pNewLineFeedback != null)
@@ -641,11 +684,44 @@ namespace AEdemo1
                         pNewLineFeedback.Stop();
                         pNewLineFeedback = null;
                         //清空所画的线对象
-                        (mainMapControl.Map as IActiveView).PartialRefresh(esriViewDrawPhase.esriViewForeground,null,null);//绘制指定的视图阶段。用一个零的包络线来画出整个相位。
-                        
+                        (mainMapControl.Map as IActiveView).PartialRefresh(esriViewDrawPhase.esriViewForeground, null, null);//绘制指定的视图阶段。用一个零的包络线来画出整个相位。
+
                     }
                     dToltalLength = 0;
                     dSegmentLength = 0;
+                    break;
+                case "MeasureArea":
+                    if (pNewPolygonFeedback != null)
+                    {
+                        IPolygon pPolygon = new PolygonClass();//为识别一个多边形的成员提供访问权限，并允许对其内部和外部环进行受控访问。
+                        IGeometry pGeo = null;//提供对所有几何对象的属性和行为的访问
+                        ITopologicalOperator pTopo = null;//在现有的几何图形之间建立新的几何图形
+                        //如果点集合中点的个数《 3，构不成多边形
+                        if (pPointCol.PointCount < 3)
+                        {
+                            return;
+                        }
+                        //将点的集合转换成多边形
+                        pPolygon = pPointCol as IPolygon;
+                        if ((pPolygon != null))
+                        {
+                            pPolygon.Close();
+                            pGeo = pPolygon as IGeometry;//将多边形转变成矢量图形
+                            pTopo = pGeo as ITopologicalOperator;
+                            IArea pArea = pGeo as IArea;//返回环与多边形的属性。
+                            area = pArea.Area;
+                            sMapUnits = GetMapUnit(mainMapControl.MapUnits);
+                            MessageBox.Show(area + sMapUnits);
+                            pPolygon = null;
+                        }
+                        pNewPolygonFeedback.Stop();
+                        pNewPolygonFeedback = null;
+                        //清空所画对象 
+                        (mainMapControl.Map as IActiveView).PartialRefresh(esriViewDrawPhase.esriViewForeground, null, null);//绘制指定的视图阶段。用一个零的包络线来画出整个相位。
+
+                    }
+                    //清空点集合中的所有点
+                    pAreaPointCol.RemovePoints(0,pAreaPointCol.PointCount);
                     break;
             }
         }
@@ -657,10 +733,11 @@ namespace AEdemo1
 
         #endregion
 
-       
-     
 
-       
+
+
+
+
 
 
     }
