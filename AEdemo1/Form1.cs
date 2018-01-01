@@ -16,6 +16,8 @@ using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.DataSourcesGDB;
 using System.IO;
+using ESRI.ArcGIS.Display;
+using ESRI.ArcGIS.esriSystem;
 namespace AEdemo1
 {
     public partial class Form1 : Form
@@ -221,15 +223,17 @@ namespace AEdemo1
         private void mOpenFileData_Click(object sender, EventArgs e)
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
-            if (dlg.ShowDialog() != DialogResult.OK) {
+            if (dlg.ShowDialog() != DialogResult.OK)
+            {
                 return;
             }
             string pFullPath = dlg.SelectedPath;
-            if (pFullPath == "") {
+            if (pFullPath == "")
+            {
                 return;
             }
             IWorkspaceFactory pFileGDBFactory = new FileGDBWorkspaceFactoryClass();
-            IWorkspace pWorkspace = pFileGDBFactory.OpenFromFile(pFullPath,0);
+            IWorkspace pWorkspace = pFileGDBFactory.OpenFromFile(pFullPath, 0);
             AddAllDataset(pWorkspace, mainMapControl);
         }
 
@@ -306,10 +310,10 @@ namespace AEdemo1
 
         }
 
- #endregion
-     
+        #endregion
 
-       
+
+
 
 
         #region 保存
@@ -429,49 +433,21 @@ namespace AEdemo1
             {
                 return;
             }
-            else {
+            else
+            {
                 double dWidth = pActiveView.Extent.Width * pActiveView.Extent.Width / pEnvelope.Width;
                 double dHeight = pActiveView.Extent.Height * pActiveView.Extent.Height / pEnvelope.Height;
                 double dXmin = pActiveView.Extent.XMin - ((pEnvelope.XMin - pActiveView.Extent.XMin) * pActiveView.Extent.Width / pEnvelope.Width);
                 double dYmin = pActiveView.Extent.YMin - ((pEnvelope.YMin - pActiveView.Extent.YMin) * pActiveView.Extent.Height / pEnvelope.Height);
                 double dXmax = dXmin + dWidth;
                 double dYmax = dYmin + dHeight;
-                pEnvelope.PutCoords(dXmin,dYmin,dXmax,dYmax);
+                pEnvelope.PutCoords(dXmin, dYmin, dXmax, dYmax);
             }
             pActiveView.Extent = pEnvelope;
             pActiveView.Refresh();
 
         }
-        #endregion
 
-        #region 加载txt
-
-        
-      
-
-
-
-
-        #endregion
-
-
-
-
-
-
-
-
-
-
-        private void mOpenTxt_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-
-        }
 
         private void mPan_Click(object sender, EventArgs e)
         {
@@ -483,22 +459,208 @@ namespace AEdemo1
             mainMapControl.Extent = mainMapControl.FullExtent;
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void mAEZoomIn_Click(object sender, EventArgs e)
         {
             mainMapControl.CurrentTool = null;
-            ICommand pCommand =  new ControlsMapZoomInToolClass();
+            ICommand pCommand = new ControlsMapZoomInToolClass();
             ITool pTool = pCommand as ITool;//将icommand转换成itool类型
             pCommand.OnCreate(mainMapControl.Object);
             mainMapControl.CurrentTool = pTool as ITool;
         }
+        #endregion
 
-      
+        #region 加载txt
 
+
+        private void mOpenTxt_Click(object sender, EventArgs e)
+        {
+
+        }
+
+
+
+
+
+        #endregion
+
+
+        #region 量测
+        private IPoint pPointPt = null;//鼠标点击点
+        private IPoint pMovePT = null;//鼠标移动时的当前点
+        private INewLineFeedback pNewLineFeedback;//追踪线对象
+        private double dToltalLength = 0;//量测总长度
+        private double dSegmentLength = 0;//片段距离
+        private string pMouseOperate;
+        private string sMapUnits ;
+        private void mMLength_Click(object sender, EventArgs e)
+        {
+            mainMapControl.CurrentTool = null;
+            pMouseOperate = "MeasureLength";
+            mainMapControl.MousePointer = esriControlsMousePointer.esriPointerCrosshair;//鼠标指针显示在MapControl上。          
+
+        }
+        /// <summary>
+        /// 获取地图单位
+        /// </summary>
+        /// <param name="_esriMapUnit"></param>
+        /// <returns></returns>
+        private string GetMapUnit(esriUnits _esriMapUnit)
+        {
+            string sMapUnits = string.Empty;
+            switch (_esriMapUnit)
+            {
+                case esriUnits.esriCentimeters:
+                    sMapUnits = "厘米";
+                    break;
+                case esriUnits.esriDecimalDegrees:
+                    sMapUnits = "十进制";
+                    break;
+                case esriUnits.esriDecimeters:
+                    sMapUnits = "分米";
+                    break;
+                case esriUnits.esriFeet:
+                    sMapUnits = "尺";
+                    break;
+                case esriUnits.esriInches:
+                    sMapUnits = "英寸";
+                    break;
+                case esriUnits.esriKilometers:
+                    sMapUnits = "千米";
+                    break;
+                case esriUnits.esriMeters:
+                    sMapUnits = "米";
+                    break;
+                case esriUnits.esriMiles:
+                    sMapUnits = "英里";
+                    break;
+                case esriUnits.esriMillimeters:
+                    sMapUnits = "毫米";
+                    break;
+                case esriUnits.esriNauticalMiles:
+                    sMapUnits = "海里";
+                    break;
+                case esriUnits.esriPoints:
+                    sMapUnits = "点";
+                    break;
+                case esriUnits.esriUnitsLast:
+                    sMapUnits = "UnitsLast";
+                    break;
+                case esriUnits.esriUnknownUnits:
+                    sMapUnits = "未知单位";
+                    break;
+                case esriUnits.esriYards:
+                    sMapUnits = "码";
+                    break;
+                default:
+                    break;
+            }
+            return sMapUnits;
+        }
+
+        
+
+        /// <summary>
+        /// 点击地图事触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mainMapControl_OnMouseDown(object sender, IMapControlEvents2_OnMouseDownEvent e)
+        {
+            //将屏幕坐标点转换为地图坐标点
+            pPointPt = (mainMapControl.Map as IActiveView).ScreenDisplay.DisplayTransformation.ToMapPoint(e.x, e.y);
+            mainMapControl.CurrentTool = null;
+            if (e.button == 1 && pMouseOperate == "MeasureLength")
+            {
+                //判断追踪线对象是否为空，若是则实例化并设置当前鼠标点为起始点
+                if (pNewLineFeedback == null)
+                {
+                    pNewLineFeedback = new NewLineFeedback();
+                    pNewLineFeedback.Display = (mainMapControl.Map as IActiveView).ScreenDisplay;
+                    //设置起点，开始动态线绘制
+                    pNewLineFeedback.Start(pPointPt);
+                    dToltalLength = 0;
+                }
+                else//如果追踪线对象不为空，则添加当前鼠标点
+                {
+                    pNewLineFeedback.AddPoint(pPointPt);
+                }
+                if (dSegmentLength != 0)
+                {
+                    dToltalLength = dToltalLength + dSegmentLength;
+                    //MessageBox.Show(dToltalLength.ToString());
+                }
+            
+            }
+          
+        }
+
+
+        /// <summary>
+        /// 当鼠标移动时触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mainMapControl_OnMouseMove(object sender, IMapControlEvents2_OnMouseMoveEvent e)
+        {
+            //将移动后的屏幕坐标点转换为地图坐标点
+            pMovePT = (mainMapControl.Map as IActiveView).ScreenDisplay.DisplayTransformation.ToMapPoint(e.x, e.y);
+           
+            if (pMouseOperate == "MeasureLength") 
+            {
+                if (pNewLineFeedback != null) //如果有点
+                {
+                    pNewLineFeedback.MoveTo(pMovePT);//移动到新的点
+                }
+                double deltaX = 0;//两点之间的x差值
+                double deltaY = 0; //两点之间的y差值
+                if((pPointPt != null)&&(pNewLineFeedback != null))
+                {
+                    deltaX = pMovePT.X - pPointPt.X; //获取新的点值----前一个点的x值
+                    deltaY = pMovePT.Y - pPointPt.Y;
+                    //两个点的距离长度
+                    dSegmentLength = Math.Round(Math.Sqrt((deltaX * deltaX)*(deltaY * deltaY)),3);
+                    dToltalLength = dToltalLength + dSegmentLength;
+                    //MessageBox.Show(dToltalLength.ToString());
+                }
+            }
+        }
+        /// <summary>
+        /// 当双击鼠标时触发
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void mainMapControl_OnDoubleClick(object sender, IMapControlEvents2_OnDoubleClickEvent e)
+        {
+            switch (pMouseOperate) 
+            {
+                case "MeasureLength":
+                    if (pNewLineFeedback != null)
+                    {
+                        sMapUnits = GetMapUnit(mainMapControl.MapUnits);
+                        MessageBox.Show(dToltalLength.ToString() + sMapUnits);
+                        pNewLineFeedback.Stop();
+                        pNewLineFeedback = null;
+                        //清空所画的线对象
+                        (mainMapControl.Map as IActiveView).PartialRefresh(esriViewDrawPhase.esriViewForeground,null,null);//绘制指定的视图阶段。用一个零的包络线来画出整个相位。
+                        
+                    }
+                    dToltalLength = 0;
+                    dSegmentLength = 0;
+                    break;
+            }
+        }
+
+
+
+
+
+
+        #endregion
+
+       
+     
+
+       
 
 
     }
