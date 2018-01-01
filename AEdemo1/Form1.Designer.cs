@@ -41,6 +41,8 @@ namespace AEdemo1
             this.mAddShp = new System.Windows.Forms.ToolStripMenuItem();
             this.mOpenRaster = new System.Windows.Forms.ToolStripMenuItem();
             this.mOpenAccess = new System.Windows.Forms.ToolStripMenuItem();
+            this.mOpenFileData = new System.Windows.Forms.ToolStripMenuItem();
+            this.mOpenTxt = new System.Windows.Forms.ToolStripMenuItem();
             this.保存ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mSaveMap = new System.Windows.Forms.ToolStripMenuItem();
             this.mSaveAsMap = new System.Windows.Forms.ToolStripMenuItem();
@@ -51,9 +53,10 @@ namespace AEdemo1
             this.mRZoomIn = new System.Windows.Forms.ToolStripMenuItem();
             this.mRZoomOut = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
-            this.mOpenFileData = new System.Windows.Forms.ToolStripMenuItem();
-            this.mOpenTxt = new System.Windows.Forms.ToolStripMenuItem();
             this.button1 = new System.Windows.Forms.Button();
+            this.mPan = new System.Windows.Forms.ToolStripMenuItem();
+            this.mFullExtent = new System.Windows.Forms.ToolStripMenuItem();
+            this.mAEZoomIn = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).BeginInit();
@@ -161,84 +164,6 @@ namespace AEdemo1
             this.mOpenAccess.Text = "打开个人数据库";
             this.mOpenAccess.Click += new System.EventHandler(this.mOpenAccess_Click);
             // 
-            // 保存ToolStripMenuItem
-            // 
-            this.保存ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mSaveMap,
-            this.mSaveAsMap,
-            this.mAESaveMap});
-            this.保存ToolStripMenuItem.Name = "保存ToolStripMenuItem";
-            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.保存ToolStripMenuItem.Text = "保存";
-            // 
-            // mSaveMap
-            // 
-            this.mSaveMap.Name = "mSaveMap";
-            this.mSaveMap.Size = new System.Drawing.Size(115, 22);
-            this.mSaveMap.Text = "保存";
-            this.mSaveMap.Click += new System.EventHandler(this.mSaveMap_Click);
-            // 
-            // mSaveAsMap
-            // 
-            this.mSaveAsMap.Name = "mSaveAsMap";
-            this.mSaveAsMap.Size = new System.Drawing.Size(115, 22);
-            this.mSaveAsMap.Text = "另存为";
-            this.mSaveAsMap.Click += new System.EventHandler(this.mSaveAsMap_Click);
-            // 
-            // mAESaveMap
-            // 
-            this.mAESaveMap.Name = "mAESaveMap";
-            this.mAESaveMap.Size = new System.Drawing.Size(115, 22);
-            this.mAESaveMap.Text = "AE保存";
-            this.mAESaveMap.Click += new System.EventHandler(this.mAESaveMap_Click);
-            // 
-            // 缩放ToolStripMenuItem
-            // 
-            this.缩放ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.mZoomIn,
-            this.mZoomOut,
-            this.mRZoomIn,
-            this.mRZoomOut});
-            this.缩放ToolStripMenuItem.Name = "缩放ToolStripMenuItem";
-            this.缩放ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.缩放ToolStripMenuItem.Text = "缩放";
-            // 
-            // mZoomIn
-            // 
-            this.mZoomIn.Name = "mZoomIn";
-            this.mZoomIn.Size = new System.Drawing.Size(124, 22);
-            this.mZoomIn.Text = "放大";
-            this.mZoomIn.Click += new System.EventHandler(this.mZoomIn_Click);
-            // 
-            // mZoomOut
-            // 
-            this.mZoomOut.Name = "mZoomOut";
-            this.mZoomOut.Size = new System.Drawing.Size(124, 22);
-            this.mZoomOut.Text = "缩小";
-            this.mZoomOut.Click += new System.EventHandler(this.mZoomOut_Click);
-            // 
-            // mRZoomIn
-            // 
-            this.mRZoomIn.Name = "mRZoomIn";
-            this.mRZoomIn.Size = new System.Drawing.Size(124, 22);
-            this.mRZoomIn.Text = "拉框放大";
-            this.mRZoomIn.Click += new System.EventHandler(this.mRZoomIn_Click);
-            // 
-            // mRZoomOut
-            // 
-            this.mRZoomOut.Name = "mRZoomOut";
-            this.mRZoomOut.Size = new System.Drawing.Size(124, 22);
-            this.mRZoomOut.Text = "拉框缩小";
-            this.mRZoomOut.Click += new System.EventHandler(this.mRZoomOut_Click);
-            // 
-            // mainMapControl
-            // 
-            this.mainMapControl.Location = new System.Drawing.Point(149, 28);
-            this.mainMapControl.Name = "mainMapControl";
-            this.mainMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("mainMapControl.OcxState")));
-            this.mainMapControl.Size = new System.Drawing.Size(1070, 507);
-            this.mainMapControl.TabIndex = 2;
-            // 
             // mOpenFileData
             // 
             this.mOpenFileData.Name = "mOpenFileData";
@@ -253,6 +178,88 @@ namespace AEdemo1
             this.mOpenTxt.Text = "加载txt文件";
             this.mOpenTxt.Click += new System.EventHandler(this.mOpenTxt_Click);
             // 
+            // 保存ToolStripMenuItem
+            // 
+            this.保存ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mSaveMap,
+            this.mSaveAsMap,
+            this.mAESaveMap});
+            this.保存ToolStripMenuItem.Name = "保存ToolStripMenuItem";
+            this.保存ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.保存ToolStripMenuItem.Text = "保存";
+            // 
+            // mSaveMap
+            // 
+            this.mSaveMap.Name = "mSaveMap";
+            this.mSaveMap.Size = new System.Drawing.Size(152, 22);
+            this.mSaveMap.Text = "保存";
+            this.mSaveMap.Click += new System.EventHandler(this.mSaveMap_Click);
+            // 
+            // mSaveAsMap
+            // 
+            this.mSaveAsMap.Name = "mSaveAsMap";
+            this.mSaveAsMap.Size = new System.Drawing.Size(152, 22);
+            this.mSaveAsMap.Text = "另存为";
+            this.mSaveAsMap.Click += new System.EventHandler(this.mSaveAsMap_Click);
+            // 
+            // mAESaveMap
+            // 
+            this.mAESaveMap.Name = "mAESaveMap";
+            this.mAESaveMap.Size = new System.Drawing.Size(152, 22);
+            this.mAESaveMap.Text = "AE保存";
+            this.mAESaveMap.Click += new System.EventHandler(this.mAESaveMap_Click);
+            // 
+            // 缩放ToolStripMenuItem
+            // 
+            this.缩放ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mZoomIn,
+            this.mZoomOut,
+            this.mRZoomIn,
+            this.mRZoomOut,
+            this.mPan,
+            this.mFullExtent});
+            this.缩放ToolStripMenuItem.Name = "缩放ToolStripMenuItem";
+            this.缩放ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.缩放ToolStripMenuItem.Text = "缩放";
+            // 
+            // mZoomIn
+            // 
+            this.mZoomIn.Name = "mZoomIn";
+            this.mZoomIn.Size = new System.Drawing.Size(152, 22);
+            this.mZoomIn.Text = "放大";
+            this.mZoomIn.Click += new System.EventHandler(this.mZoomIn_Click);
+            // 
+            // mZoomOut
+            // 
+            this.mZoomOut.Name = "mZoomOut";
+            this.mZoomOut.Size = new System.Drawing.Size(152, 22);
+            this.mZoomOut.Text = "缩小";
+            this.mZoomOut.Click += new System.EventHandler(this.mZoomOut_Click);
+            // 
+            // mRZoomIn
+            // 
+            this.mRZoomIn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mAEZoomIn});
+            this.mRZoomIn.Name = "mRZoomIn";
+            this.mRZoomIn.Size = new System.Drawing.Size(152, 22);
+            this.mRZoomIn.Text = "拉框放大";
+            this.mRZoomIn.Click += new System.EventHandler(this.mRZoomIn_Click);
+            // 
+            // mRZoomOut
+            // 
+            this.mRZoomOut.Name = "mRZoomOut";
+            this.mRZoomOut.Size = new System.Drawing.Size(152, 22);
+            this.mRZoomOut.Text = "拉框缩小";
+            this.mRZoomOut.Click += new System.EventHandler(this.mRZoomOut_Click);
+            // 
+            // mainMapControl
+            // 
+            this.mainMapControl.Location = new System.Drawing.Point(149, 28);
+            this.mainMapControl.Name = "mainMapControl";
+            this.mainMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("mainMapControl.OcxState")));
+            this.mainMapControl.Size = new System.Drawing.Size(1070, 507);
+            this.mainMapControl.TabIndex = 2;
+            // 
             // button1
             // 
             this.button1.Location = new System.Drawing.Point(33, 147);
@@ -262,6 +269,27 @@ namespace AEdemo1
             this.button1.Text = "button1";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // mPan
+            // 
+            this.mPan.Name = "mPan";
+            this.mPan.Size = new System.Drawing.Size(152, 22);
+            this.mPan.Text = "缩放";
+            this.mPan.Click += new System.EventHandler(this.mPan_Click);
+            // 
+            // mFullExtent
+            // 
+            this.mFullExtent.Name = "mFullExtent";
+            this.mFullExtent.Size = new System.Drawing.Size(152, 22);
+            this.mFullExtent.Text = "全图显示";
+            this.mFullExtent.Click += new System.EventHandler(this.mFullExtent_Click);
+            // 
+            // mAEZoomIn
+            // 
+            this.mAEZoomIn.Name = "mAEZoomIn";
+            this.mAEZoomIn.Size = new System.Drawing.Size(152, 22);
+            this.mAEZoomIn.Text = "AE实现";
+            this.mAEZoomIn.Click += new System.EventHandler(this.mAEZoomIn_Click);
             // 
             // Form1
             // 
@@ -275,6 +303,7 @@ namespace AEdemo1
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
@@ -311,6 +340,9 @@ namespace AEdemo1
         private System.Windows.Forms.ToolStripMenuItem mOpenFileData;
         private System.Windows.Forms.ToolStripMenuItem mOpenTxt;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.ToolStripMenuItem mPan;
+        private System.Windows.Forms.ToolStripMenuItem mFullExtent;
+        private System.Windows.Forms.ToolStripMenuItem mAEZoomIn;
     }
 }
 

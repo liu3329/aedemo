@@ -406,16 +406,40 @@ namespace AEdemo1
 
         private void mRZoomIn_Click(object sender, EventArgs e)
         {
+            IActiveView pActiveView = mainMapControl.ActiveView;
             IEnvelope pEnvelope = mainMapControl.TrackRectangle();//该方法在MapControl上触发鼠标点击事件，然后生成轨迹矩形
+            //如果包络线没有
             if (pEnvelope == null || pEnvelope.IsEmpty || pEnvelope.Height == 0 || pEnvelope.Width == 0)
             {
-
-
+                return;
+            }
+            else//如果有包络线范围
+            {
+                pActiveView.Extent = pEnvelope;
+                pActiveView.Refresh();
             }
         }
 
         private void mRZoomOut_Click(object sender, EventArgs e)
         {
+            IActiveView pActiveView = mainMapControl.ActiveView;//该接口管理ArcMap中的主应用程序窗口和所有绘图操作。
+            IEnvelope pEnvelope = mainMapControl.TrackRectangle();//该方法在MapControl上触发鼠标点击事件，然后生成轨迹矩形
+            //如果包络线没有
+            if (pEnvelope == null || pEnvelope.IsEmpty || pEnvelope.Height == 0 || pEnvelope.Width == 0)
+            {
+                return;
+            }
+            else {
+                double dWidth = pActiveView.Extent.Width * pActiveView.Extent.Width / pEnvelope.Width;
+                double dHeight = pActiveView.Extent.Height * pActiveView.Extent.Height / pEnvelope.Height;
+                double dXmin = pActiveView.Extent.XMin - ((pEnvelope.XMin - pActiveView.Extent.XMin) * pActiveView.Extent.Width / pEnvelope.Width);
+                double dYmin = pActiveView.Extent.YMin - ((pEnvelope.YMin - pActiveView.Extent.YMin) * pActiveView.Extent.Height / pEnvelope.Height);
+                double dXmax = dXmin + dWidth;
+                double dYmax = dYmin + dHeight;
+                pEnvelope.PutCoords(dXmin,dYmin,dXmax,dYmax);
+            }
+            pActiveView.Extent = pEnvelope;
+            pActiveView.Refresh();
 
         }
         #endregion
@@ -447,6 +471,30 @@ namespace AEdemo1
         private void button1_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void mPan_Click(object sender, EventArgs e)
+        {
+            mainMapControl.Pan();
+        }
+
+        private void mFullExtent_Click(object sender, EventArgs e)
+        {
+            mainMapControl.Extent = mainMapControl.FullExtent;
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mAEZoomIn_Click(object sender, EventArgs e)
+        {
+            mainMapControl.CurrentTool = null;
+            ICommand pCommand =  new ControlsMapZoomInToolClass();
+            ITool pTool = pCommand as ITool;//将icommand转换成itool类型
+            pCommand.OnCreate(mainMapControl.Object);
+            mainMapControl.CurrentTool = pTool as ITool;
         }
 
       
