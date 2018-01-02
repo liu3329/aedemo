@@ -60,6 +60,9 @@ namespace AEdemo1
             this.mMLength = new System.Windows.Forms.ToolStripMenuItem();
             this.mMAera = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
+            this.mSelect = new System.Windows.Forms.ToolStripMenuItem();
+            this.mZoomSelect = new System.Windows.Forms.ToolStripMenuItem();
+            this.mClearSelect = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).BeginInit();
@@ -280,7 +283,8 @@ namespace AEdemo1
             // 其他ToolStripMenuItem
             // 
             this.其他ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.量测ToolStripMenuItem});
+            this.量测ToolStripMenuItem,
+            this.mSelect});
             this.其他ToolStripMenuItem.Name = "其他ToolStripMenuItem";
             this.其他ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
             this.其他ToolStripMenuItem.Text = "其他";
@@ -297,14 +301,14 @@ namespace AEdemo1
             // mMLength
             // 
             this.mMLength.Name = "mMLength";
-            this.mMLength.Size = new System.Drawing.Size(152, 22);
+            this.mMLength.Size = new System.Drawing.Size(100, 22);
             this.mMLength.Text = "长度";
             this.mMLength.Click += new System.EventHandler(this.mMLength_Click);
             // 
             // mMAera
             // 
             this.mMAera.Name = "mMAera";
-            this.mMAera.Size = new System.Drawing.Size(152, 22);
+            this.mMAera.Size = new System.Drawing.Size(100, 22);
             this.mMAera.Text = "面积";
             this.mMAera.Click += new System.EventHandler(this.mMAera_Click);
             // 
@@ -318,6 +322,30 @@ namespace AEdemo1
             this.mainMapControl.OnMouseDown += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseDownEventHandler(this.mainMapControl_OnMouseDown);
             this.mainMapControl.OnMouseMove += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseMoveEventHandler(this.mainMapControl_OnMouseMove);
             this.mainMapControl.OnDoubleClick += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnDoubleClickEventHandler(this.mainMapControl_OnDoubleClick);
+            // 
+            // mSelect
+            // 
+            this.mSelect.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mZoomSelect,
+            this.mClearSelect});
+            this.mSelect.Name = "mSelect";
+            this.mSelect.Size = new System.Drawing.Size(152, 22);
+            this.mSelect.Text = "要素选择";
+            this.mSelect.Click += new System.EventHandler(this.mSelect_Click);
+            // 
+            // mZoomSelect
+            // 
+            this.mZoomSelect.Name = "mZoomSelect";
+            this.mZoomSelect.Size = new System.Drawing.Size(152, 22);
+            this.mZoomSelect.Text = "缩放至要素";
+            this.mZoomSelect.Click += new System.EventHandler(this.mZoomSelect_Click);
+            // 
+            // mClearSelect
+            // 
+            this.mClearSelect.Name = "mClearSelect";
+            this.mClearSelect.Size = new System.Drawing.Size(152, 22);
+            this.mClearSelect.Text = "清除要素";
+            this.mClearSelect.Click += new System.EventHandler(this.mClearSelect_Click);
             // 
             // Form1
             // 
@@ -372,6 +400,9 @@ namespace AEdemo1
         private System.Windows.Forms.ToolStripMenuItem 量测ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mMLength;
         private System.Windows.Forms.ToolStripMenuItem mMAera;
+        private System.Windows.Forms.ToolStripMenuItem mSelect;
+        private System.Windows.Forms.ToolStripMenuItem mZoomSelect;
+        private System.Windows.Forms.ToolStripMenuItem mClearSelect;
     }
 }
 
