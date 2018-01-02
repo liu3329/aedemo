@@ -770,7 +770,7 @@ namespace AEdemo1
             pMouseOperate = "Select";
         }
 
-        #endregion
+      
 
         private void mZoomSelect_Click(object sender, EventArgs e)
         {
@@ -805,8 +805,12 @@ namespace AEdemo1
             IActiveView pActiveView = mainMapControl.ActiveView;
             pActiveView.FocusMap.ClearSelection();
             pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection,null,pActiveView.Extent);
-                
+
         }
+        #endregion
+
+
+
 
 
 
