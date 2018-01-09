@@ -55,6 +55,7 @@ namespace AEdemo1
             this.mRZoomOut = new System.Windows.Forms.ToolStripMenuItem();
             this.mPan = new System.Windows.Forms.ToolStripMenuItem();
             this.mFullExtent = new System.Windows.Forms.ToolStripMenuItem();
+            this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.其他ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.量测ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mMLength = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,10 +64,19 @@ namespace AEdemo1
             this.mZoomSelect = new System.Windows.Forms.ToolStripMenuItem();
             this.mClearSelect = new System.Windows.Forms.ToolStripMenuItem();
             this.mainMapControl = new ESRI.ArcGIS.Controls.AxMapControl();
-            this.导出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.axTOCControl = new ESRI.ArcGIS.Controls.AxTOCControl();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
+            this.btnLayerSel = new System.Windows.Forms.ToolStripMenuItem();
+            this.btnLayerUnSel = new System.Windows.Forms.ToolStripMenuItem();
+            this.属性表ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.缩放到图层ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.移除图层ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl)).BeginInit();
+            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // axLicenseControl1
@@ -88,7 +98,7 @@ namespace AEdemo1
             this.其他ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1231, 25);
+            this.menuStrip1.Size = new System.Drawing.Size(1277, 25);
             this.menuStrip1.TabIndex = 13;
             this.menuStrip1.Text = "缩放";
             // 
@@ -234,14 +244,14 @@ namespace AEdemo1
             // mZoomIn
             // 
             this.mZoomIn.Name = "mZoomIn";
-            this.mZoomIn.Size = new System.Drawing.Size(152, 22);
+            this.mZoomIn.Size = new System.Drawing.Size(124, 22);
             this.mZoomIn.Text = "放大";
             this.mZoomIn.Click += new System.EventHandler(this.mZoomIn_Click);
             // 
             // mZoomOut
             // 
             this.mZoomOut.Name = "mZoomOut";
-            this.mZoomOut.Size = new System.Drawing.Size(152, 22);
+            this.mZoomOut.Size = new System.Drawing.Size(124, 22);
             this.mZoomOut.Text = "缩小";
             this.mZoomOut.Click += new System.EventHandler(this.mZoomOut_Click);
             // 
@@ -250,7 +260,7 @@ namespace AEdemo1
             this.mRZoomIn.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.mAEZoomIn});
             this.mRZoomIn.Name = "mRZoomIn";
-            this.mRZoomIn.Size = new System.Drawing.Size(152, 22);
+            this.mRZoomIn.Size = new System.Drawing.Size(124, 22);
             this.mRZoomIn.Text = "拉框放大";
             this.mRZoomIn.Click += new System.EventHandler(this.mRZoomIn_Click);
             // 
@@ -264,23 +274,29 @@ namespace AEdemo1
             // mRZoomOut
             // 
             this.mRZoomOut.Name = "mRZoomOut";
-            this.mRZoomOut.Size = new System.Drawing.Size(152, 22);
+            this.mRZoomOut.Size = new System.Drawing.Size(124, 22);
             this.mRZoomOut.Text = "拉框缩小";
             this.mRZoomOut.Click += new System.EventHandler(this.mRZoomOut_Click);
             // 
             // mPan
             // 
             this.mPan.Name = "mPan";
-            this.mPan.Size = new System.Drawing.Size(152, 22);
+            this.mPan.Size = new System.Drawing.Size(124, 22);
             this.mPan.Text = "缩放";
             this.mPan.Click += new System.EventHandler(this.mPan_Click);
             // 
             // mFullExtent
             // 
             this.mFullExtent.Name = "mFullExtent";
-            this.mFullExtent.Size = new System.Drawing.Size(152, 22);
+            this.mFullExtent.Size = new System.Drawing.Size(124, 22);
             this.mFullExtent.Text = "全图显示";
             this.mFullExtent.Click += new System.EventHandler(this.mFullExtent_Click);
+            // 
+            // 导出ToolStripMenuItem
+            // 
+            this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
+            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.导出ToolStripMenuItem.Text = "导出";
             // 
             // 其他ToolStripMenuItem
             // 
@@ -340,36 +356,101 @@ namespace AEdemo1
             // 
             // mainMapControl
             // 
-            this.mainMapControl.Location = new System.Drawing.Point(149, 28);
+            this.mainMapControl.Location = new System.Drawing.Point(184, 53);
             this.mainMapControl.Name = "mainMapControl";
             this.mainMapControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("mainMapControl.OcxState")));
-            this.mainMapControl.Size = new System.Drawing.Size(1070, 507);
+            this.mainMapControl.Size = new System.Drawing.Size(1080, 507);
             this.mainMapControl.TabIndex = 2;
             this.mainMapControl.OnMouseDown += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseDownEventHandler(this.mainMapControl_OnMouseDown);
             this.mainMapControl.OnMouseMove += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnMouseMoveEventHandler(this.mainMapControl_OnMouseMove);
             this.mainMapControl.OnDoubleClick += new ESRI.ArcGIS.Controls.IMapControlEvents2_Ax_OnDoubleClickEventHandler(this.mainMapControl_OnDoubleClick);
             // 
-            // 导出ToolStripMenuItem
+            // axTOCControl
             // 
-            this.导出ToolStripMenuItem.Name = "导出ToolStripMenuItem";
-            this.导出ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
-            this.导出ToolStripMenuItem.Text = "导出";
+            this.axTOCControl.Location = new System.Drawing.Point(12, 53);
+            this.axTOCControl.Name = "axTOCControl";
+            this.axTOCControl.OcxState = ((System.Windows.Forms.AxHost.State)(resources.GetObject("axTOCControl.OcxState")));
+            this.axTOCControl.Size = new System.Drawing.Size(166, 353);
+            this.axTOCControl.TabIndex = 14;
+            this.axTOCControl.OnMouseDown += new ESRI.ArcGIS.Controls.ITOCControlEvents_Ax_OnMouseDownEventHandler(this.axTOCControl_OnMouseDown);
+            this.axTOCControl.OnMouseUp += new ESRI.ArcGIS.Controls.ITOCControlEvents_Ax_OnMouseUpEventHandler(this.axTOCControl_OnMouseUp);
+            // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripDropDownButton1});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 25);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1277, 25);
+            this.toolStrip1.TabIndex = 16;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripDropDownButton1
+            // 
+            this.toolStripDropDownButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.btnLayerSel,
+            this.btnLayerUnSel,
+            this.属性表ToolStripMenuItem,
+            this.缩放到图层ToolStripMenuItem,
+            this.移除图层ToolStripMenuItem});
+            this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
+            this.toolStripDropDownButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripDropDownButton1.Name = "toolStripDropDownButton1";
+            this.toolStripDropDownButton1.Size = new System.Drawing.Size(29, 22);
+            this.toolStripDropDownButton1.Text = "toolStripDropDownButton1";
+            // 
+            // btnLayerSel
+            // 
+            this.btnLayerSel.Name = "btnLayerSel";
+            this.btnLayerSel.Size = new System.Drawing.Size(152, 22);
+            this.btnLayerSel.Text = "选择";
+            // 
+            // btnLayerUnSel
+            // 
+            this.btnLayerUnSel.Name = "btnLayerUnSel";
+            this.btnLayerUnSel.Size = new System.Drawing.Size(152, 22);
+            this.btnLayerUnSel.Text = "取消选择";
+            // 
+            // 属性表ToolStripMenuItem
+            // 
+            this.属性表ToolStripMenuItem.Name = "属性表ToolStripMenuItem";
+            this.属性表ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.属性表ToolStripMenuItem.Text = "属性表";
+            // 
+            // 缩放到图层ToolStripMenuItem
+            // 
+            this.缩放到图层ToolStripMenuItem.Name = "缩放到图层ToolStripMenuItem";
+            this.缩放到图层ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.缩放到图层ToolStripMenuItem.Text = "缩放到图层";
+            // 
+            // 移除图层ToolStripMenuItem
+            // 
+            this.移除图层ToolStripMenuItem.Name = "移除图层ToolStripMenuItem";
+            this.移除图层ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.移除图层ToolStripMenuItem.Text = "移除图层";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1231, 547);
+            this.ClientSize = new System.Drawing.Size(1277, 659);
+            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.axTOCControl);
             this.Controls.Add(this.mainMapControl);
             this.Controls.Add(this.axLicenseControl1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.axTOCControl)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -412,6 +493,14 @@ namespace AEdemo1
         private System.Windows.Forms.ToolStripMenuItem mZoomSelect;
         private System.Windows.Forms.ToolStripMenuItem mClearSelect;
         private System.Windows.Forms.ToolStripMenuItem 导出ToolStripMenuItem;
+        private ESRI.ArcGIS.Controls.AxTOCControl axTOCControl;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
+        private System.Windows.Forms.ToolStripMenuItem btnLayerSel;
+        private System.Windows.Forms.ToolStripMenuItem btnLayerUnSel;
+        private System.Windows.Forms.ToolStripMenuItem 属性表ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 缩放到图层ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 移除图层ToolStripMenuItem;
     }
 }
 

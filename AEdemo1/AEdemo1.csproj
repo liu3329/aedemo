@@ -127,6 +127,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormAtrribute.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormAtrribute.Designer.cs">
+      <DependentUpon>FormAtrribute.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormExportMap.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -142,6 +148,9 @@
     <Compile Include="Txt.cs" />
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormAtrribute.resx">
+      <DependentUpon>FormAtrribute.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormExportMap.resx">
       <DependentUpon>FormExportMap.cs</DependentUpon>
