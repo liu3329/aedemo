@@ -32,15 +32,15 @@ namespace AEdemo1
             if(_curFeatureLayer == null){
                 return;
             }
-            IFeature pFeature = null;//提供对返回并设置特性属性的成员的访问
+            IFeature pFeature = null;//提供对返回并设置图形属性的成员的访问
             DataTable pFeatDT = new DataTable();//创建数据表
             DataRow pDataRow = null;//数据表行变量
             DataColumn pDataCol = null;//数据表列变量
-            IField pField = null;
+            IField pField = null;//返回控制字段的接口
             for (int i = 0; i < _curFeatureLayer.FeatureClass.Fields.FieldCount; i++)
             {
                 pDataCol = new DataColumn();
-                pField = _curFeatureLayer.FeatureClass.Fields.get_Field(i);
+                pField = _curFeatureLayer.FeatureClass.Fields.get_Field(i);//图层--图层类---字段集合--获取集合
                 pDataCol.ColumnName = pField.AliasName;//获取字段名作为列标题
                 pDataCol.DataType = Type.GetType("System.Object");//定义列字段的类型
                 pFeatDT.Columns.Add(pDataCol);//在数据表中添加字段信息
