@@ -28,6 +28,7 @@ namespace AEdemo1
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.axLicenseControl1 = new ESRI.ArcGIS.Controls.AxLicenseControl();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -69,14 +70,18 @@ namespace AEdemo1
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
             this.btnLayerSel = new System.Windows.Forms.ToolStripMenuItem();
             this.btnLayerUnSel = new System.Windows.Forms.ToolStripMenuItem();
-            this. Ù–‘±ÌToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bt_showAttribute = new System.Windows.Forms.ToolStripMenuItem();
             this.Àı∑≈µΩÕº≤„ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.“∆≥˝Õº≤„ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.bt_showAttri = new System.Windows.Forms.ToolStripMenuItem();
+            this.bt_deleteLayer = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.axTOCControl)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // axLicenseControl1
@@ -391,7 +396,7 @@ namespace AEdemo1
             this.toolStripDropDownButton1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.btnLayerSel,
             this.btnLayerUnSel,
-            this. Ù–‘±ÌToolStripMenuItem,
+            this.bt_showAttribute,
             this.Àı∑≈µΩÕº≤„ToolStripMenuItem,
             this.“∆≥˝Õº≤„ToolStripMenuItem});
             this.toolStripDropDownButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripDropDownButton1.Image")));
@@ -412,11 +417,11 @@ namespace AEdemo1
             this.btnLayerUnSel.Size = new System.Drawing.Size(152, 22);
             this.btnLayerUnSel.Text = "»°œ˚—°‘Ò";
             // 
-            //  Ù–‘±ÌToolStripMenuItem
+            // bt_showAttribute
             // 
-            this. Ù–‘±ÌToolStripMenuItem.Name = " Ù–‘±ÌToolStripMenuItem";
-            this. Ù–‘±ÌToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this. Ù–‘±ÌToolStripMenuItem.Text = " Ù–‘±Ì";
+            this.bt_showAttribute.Name = "bt_showAttribute";
+            this.bt_showAttribute.Size = new System.Drawing.Size(152, 22);
+            this.bt_showAttribute.Text = " Ù–‘±Ì";
             // 
             // Àı∑≈µΩÕº≤„ToolStripMenuItem
             // 
@@ -429,6 +434,28 @@ namespace AEdemo1
             this.“∆≥˝Õº≤„ToolStripMenuItem.Name = "“∆≥˝Õº≤„ToolStripMenuItem";
             this.“∆≥˝Õº≤„ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.“∆≥˝Õº≤„ToolStripMenuItem.Text = "“∆≥˝Õº≤„";
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bt_showAttri,
+            this.bt_deleteLayer});
+            this.contextMenuStrip.Name = "contextMenuStrip1";
+            this.contextMenuStrip.Size = new System.Drawing.Size(153, 70);
+            // 
+            // bt_showAttri
+            // 
+            this.bt_showAttri.Name = "bt_showAttri";
+            this.bt_showAttri.Size = new System.Drawing.Size(152, 22);
+            this.bt_showAttri.Text = " Ù–‘±Ì";
+            this.bt_showAttri.Click += new System.EventHandler(this.bt_showAttri_Click);
+            // 
+            // bt_deleteLayer
+            // 
+            this.bt_deleteLayer.Name = "bt_deleteLayer";
+            this.bt_deleteLayer.Size = new System.Drawing.Size(152, 22);
+            this.bt_deleteLayer.Text = "“∆≥˝Õº≤„";
+            this.bt_deleteLayer.Click += new System.EventHandler(this.bt_deleteLayer_Click);
             // 
             // Form1
             // 
@@ -451,6 +478,7 @@ namespace AEdemo1
             ((System.ComponentModel.ISupportInitialize)(this.axTOCControl)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -498,9 +526,12 @@ namespace AEdemo1
         private System.Windows.Forms.ToolStripDropDownButton toolStripDropDownButton1;
         private System.Windows.Forms.ToolStripMenuItem btnLayerSel;
         private System.Windows.Forms.ToolStripMenuItem btnLayerUnSel;
-        private System.Windows.Forms.ToolStripMenuItem  Ù–‘±ÌToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bt_showAttribute;
         private System.Windows.Forms.ToolStripMenuItem Àı∑≈µΩÕº≤„ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem “∆≥˝Õº≤„ToolStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem bt_showAttri;
+        private System.Windows.Forms.ToolStripMenuItem bt_deleteLayer;
     }
 }
 

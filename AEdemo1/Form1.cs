@@ -764,7 +764,7 @@ namespace AEdemo1
                 }
                 pGeo = pEnv as IGeometry;//将包络线转换成几何图形
                 mainMapControl.Map.SelectByShape(pGeo, null, false);//在地图中选择一个形状和一个选择环境(可选)。
-                mainMapControl.Refresh(esriViewDrawPhase.esriViewGeoSelection,null,null);
+                mainMapControl.Refresh(esriViewDrawPhase.esriViewGeoSelection, null, null);
             }
             #endregion
 
@@ -779,7 +779,7 @@ namespace AEdemo1
             pMouseOperate = "Select";
         }
 
-      
+
 
         private void mZoomSelect_Click(object sender, EventArgs e)
         {
@@ -798,7 +798,7 @@ namespace AEdemo1
                 enumFeature.Reset();//将枚举设置为开始
                 IEnvelope pEnvelope = new EnvelopeClass();
                 IFeature pFeature = enumFeature.Next();
-                while(pFeature != null)
+                while (pFeature != null)
                 {
                     pEnvelope.Union(pFeature.Extent);//获取所有选中要素的外包框范围，并使地图视图缩放至该范围
                     pFeature = enumFeature.Next();
@@ -813,27 +813,29 @@ namespace AEdemo1
         {
             IActiveView pActiveView = mainMapControl.ActiveView;
             pActiveView.FocusMap.ClearSelection();
-            pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection,null,pActiveView.Extent);
+            pActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection, null, pActiveView.Extent);
 
         }
         #endregion
 
 
         #region toc控件
+
         private ILayer pMoveLayer;//需要调整显示顺序的图层
         private int toIndex;//存放拖动图层移动到的图层索引号
         private ESRI.ArcGIS.Geometry.Point pMoveLayerPoint = new ESRI.ArcGIS.Geometry.Point();  //鼠标在TOC中左键按下时点的位置
 
         IFeatureLayer pTocFeatureLayer = null;//点击的要素图层
-        private FormAtrribute frmAtrribute = null;//图层属性窗体
+        private FormAttribute frmAttribute = null;//图层属性窗体
 
         private IFeatureLayer _curFeatureLayer;
-        public IFeatureLayer curFeatureLayer {
+        public IFeatureLayer curFeatureLayer
+        {
             get { return _curFeatureLayer; }
             set { _curFeatureLayer = value; }
         }
-         
-        
+
+
         /// <param name="X">当鼠标在toc控件中按下时，参照toc控件左上角为原点，以像素为单位，返回鼠标的x坐标</param>
         /// <param name="Y">返回鼠标在toc控件中的y坐标</param>
         /// <param name="ItemType">esritoccontrolitem枚举常量</param>
@@ -841,7 +843,7 @@ namespace AEdemo1
         /// <param name="Layer">被点击的图层对象。。提供控制图层的接口</param>
         /// <param name="Unk">图层组对象</param>
         /// <param name="Data">图层组中图例类的索引，根据索引和图例可获得特定的图例类</param>
-        public void HitTest(int X,int Y,ref esriTOCControlItem ItemType,ref IBasicMap BasicMap,ref ILayer Layer,ref object Unk,ref object Data) 
+        public void HitTest(int X, int Y, ref esriTOCControlItem ItemType, ref IBasicMap BasicMap, ref ILayer Layer, ref object Unk, ref object Data)
         {
 
         }
@@ -850,7 +852,7 @@ namespace AEdemo1
         private void axTOCControl_OnMouseDown(object sender, ITOCControlEvents_OnMouseDownEvent e)
         {
             //左键按下
-            if(e.button == 1)
+            if (e.button == 1)
             {
                 //初始化
                 esriTOCControlItem pItem = esriTOCControlItem.esriTOCControlItemNone;
@@ -859,21 +861,24 @@ namespace AEdemo1
                 object data = null;
                 ILayer pLayer = null;
                 //hittest方法返回toc中点击坐标点处的对象类型
-                axTOCControl.HitTest(e.x,e.y,ref pItem,ref pMap,ref pLayer,ref unk,ref data);
-                pMoveLayerPoint.PutCoords(e.x,e.y);
+                axTOCControl.HitTest(e.x, e.y, ref pItem, ref pMap, ref pLayer, ref unk, ref data);
+                pMoveLayerPoint.PutCoords(e.x, e.y);
                 //如果是一个图层
-                if (pItem == esriTOCControlItem.esriTOCControlItemLayer) {
+                if (pItem == esriTOCControlItem.esriTOCControlItemLayer)
+                {
                     if (pLayer is IAnnotationSublayer)//如果是一个注释图层
                     {
                         return;
                     }
-                    else {
+                    else
+                    {
                         pMoveLayer = pLayer;//需要移动的图层
                     }
                 }
             }
             //如果点击右键
-            if(e.button == 2){
+            if (e.button == 2)
+            {
                 esriTOCControlItem pItem = esriTOCControlItem.esriTOCControlItemNone;
                 IBasicMap pMap = null;
                 object unk = null;
@@ -882,10 +887,11 @@ namespace AEdemo1
                 //hittest方法返回toc中点击坐标点处的对象类型
                 axTOCControl.HitTest(e.x, e.y, ref pItem, ref pMap, ref pLayer, ref unk, ref data);
                 pTocFeatureLayer = pLayer as IFeatureLayer;
-                if(pItem == esriTOCControlItem.esriTOCControlItemLayer && pTocFeatureLayer != null){
-                    btnLayerSel.Enabled =! pTocFeatureLayer.Selectable;
+                if (pItem == esriTOCControlItem.esriTOCControlItemLayer && pTocFeatureLayer != null)
+                {
+                    btnLayerSel.Enabled = !pTocFeatureLayer.Selectable;
                     btnLayerUnSel.Enabled = pTocFeatureLayer.Selectable;
-                    ContextMenuStrip.Show(Control.MousePosition);//右键单击菜单在鼠标的位置显示
+                    contextMenuStrip.Show(Control.MousePosition);//右键单击菜单在鼠标的位置显示
                 }
             }
         }
@@ -894,7 +900,8 @@ namespace AEdemo1
         //当toc控件的鼠标弹起事件
         private void axTOCControl_OnMouseUp(object sender, ITOCControlEvents_OnMouseUpEvent e)
         {
-            if (e.button == 1 && pMoveLayer != null && pMoveLayerPoint.Y != e.y) {
+            if (e.button == 1 && pMoveLayer != null && pMoveLayerPoint.Y != e.y)
+            {
                 esriTOCControlItem pItem = esriTOCControlItem.esriTOCControlItemNone;
                 IBasicMap pBasicMap = null;
                 object unk = null;
@@ -903,44 +910,71 @@ namespace AEdemo1
                 //hittest方法返回toc中点击坐标点处的对象类型
                 axTOCControl.HitTest(e.x, e.y, ref pItem, ref pBasicMap, ref pLayer, ref unk, ref data);
                 IMap pMap = mainMapControl.ActiveView.FocusMap;
-                if(pItem == esriTOCControlItem.esriTOCControlItemLayer || pLayer != null){
-                    if (pMoveLayer != null) {
+                if (pItem == esriTOCControlItem.esriTOCControlItemLayer || pLayer != null)
+                {
+                    if (pMoveLayer != null)
+                    {
                         ILayer pTempLayer;
                         //获取鼠标弹起时所在的图层索引号
                         for (int i = 0; i < pMap.LayerCount; i++)
                         {
                             pTempLayer = pMap.get_Layer(i);
-                            if(pTempLayer == pLayer){
+                            if (pTempLayer == pLayer)
+                            {
                                 toIndex = i;
                             }
                         }
                     }
                 }
                 //移动到最前面
-                else if (pItem == esriTOCControlItem.esriTOCControlItemMap) {
+                else if (pItem == esriTOCControlItem.esriTOCControlItemMap)
+                {
                     toIndex = 0;
                 }
-                else if (pItem == esriTOCControlItem.esriTOCControlItemNone) {
+                else if (pItem == esriTOCControlItem.esriTOCControlItemNone)
+                {
                     toIndex = pMap.LayerCount - 1;
                 }
                 MessageBox.Show(toIndex.ToString());
-                pMap.MoveLayer(pMoveLayer,toIndex);
+                pMap.MoveLayer(pMoveLayer, toIndex);
                 mainMapControl.ActiveView.Refresh();
                 axTOCControl.Update();
             }
         }
 
 
-        public void InitUI() { 
-            
-        
-        }
+
 
 
 
 
         #endregion
 
-    
+
+
+        private void bt_showAttri_Click(object sender, EventArgs e)
+        {
+            if (frmAttribute == null || frmAttribute.IsDisposed)
+            {
+                frmAttribute = new FormAttribute();
+            }
+            frmAttribute.curFeatureLayer = pTocFeatureLayer;
+            frmAttribute.InitUI();
+            frmAttribute.ShowDialog();
+        }
+
+        private void bt_deleteLayer_Click(object sender, EventArgs e)
+        {
+            if (pTocFeatureLayer == null) { return; }
+            DialogResult result = MessageBox.Show("是否删除【"+pTocFeatureLayer.Name+"】图层","提示",MessageBoxButtons.OKCancel,MessageBoxIcon.Information);
+            if (result == DialogResult.OK) {
+                mainMapControl.Map.DeleteLayer(pTocFeatureLayer);
+            }
+            mainMapControl.ActiveView.Refresh();
+
+
+        }
+
+
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace AEdemo1
 {
-    partial class FormAtrribute
+    partial class FormAttribute
     {
         /// <summary>
         /// Required designer variable.

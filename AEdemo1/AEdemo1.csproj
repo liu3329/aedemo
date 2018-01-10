@@ -127,11 +127,11 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormAtrribute.cs">
+    <Compile Include="FormAttribute.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormAtrribute.Designer.cs">
-      <DependentUpon>FormAtrribute.cs</DependentUpon>
+    <Compile Include="FormAttribute.Designer.cs">
+      <DependentUpon>FormAttribute.cs</DependentUpon>
     </Compile>
     <Compile Include="FormExportMap.cs">
       <SubType>Form</SubType>
@@ -149,8 +149,8 @@
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormAtrribute.resx">
-      <DependentUpon>FormAtrribute.cs</DependentUpon>
+    <EmbeddedResource Include="FormAttribute.resx">
+      <DependentUpon>FormAttribute.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="FormExportMap.resx">
       <DependentUpon>FormExportMap.cs</DependentUpon>
