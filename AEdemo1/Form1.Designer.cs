@@ -76,6 +76,13 @@ namespace AEdemo1
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.bt_showAttri = new System.Windows.Forms.ToolStripMenuItem();
             this.bt_deleteLayer = new System.Windows.Forms.ToolStripMenuItem();
+            this.查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.bt_qAttri = new System.Windows.Forms.ToolStripMenuItem();
+            this.空间查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.图形查询ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.地图选择集ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.统计ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.选择操作选项ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.axLicenseControl1)).BeginInit();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.mainMapControl)).BeginInit();
@@ -100,7 +107,8 @@ namespace AEdemo1
             this.保存ToolStripMenuItem,
             this.缩放ToolStripMenuItem,
             this.导出ToolStripMenuItem,
-            this.其他ToolStripMenuItem});
+            this.其他ToolStripMenuItem,
+            this.查询ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(1277, 25);
@@ -318,7 +326,7 @@ namespace AEdemo1
             this.mMLength,
             this.mMAera});
             this.量测ToolStripMenuItem.Name = "量测ToolStripMenuItem";
-            this.量测ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.量测ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.量测ToolStripMenuItem.Text = "量测";
             // 
             // mMLength
@@ -341,7 +349,7 @@ namespace AEdemo1
             this.mZoomSelect,
             this.mClearSelect});
             this.mSelect.Name = "mSelect";
-            this.mSelect.Size = new System.Drawing.Size(124, 22);
+            this.mSelect.Size = new System.Drawing.Size(152, 22);
             this.mSelect.Text = "要素选择";
             this.mSelect.Click += new System.EventHandler(this.mSelect_Click);
             // 
@@ -408,31 +416,31 @@ namespace AEdemo1
             // btnLayerSel
             // 
             this.btnLayerSel.Name = "btnLayerSel";
-            this.btnLayerSel.Size = new System.Drawing.Size(152, 22);
+            this.btnLayerSel.Size = new System.Drawing.Size(136, 22);
             this.btnLayerSel.Text = "选择";
             // 
             // btnLayerUnSel
             // 
             this.btnLayerUnSel.Name = "btnLayerUnSel";
-            this.btnLayerUnSel.Size = new System.Drawing.Size(152, 22);
+            this.btnLayerUnSel.Size = new System.Drawing.Size(136, 22);
             this.btnLayerUnSel.Text = "取消选择";
             // 
             // bt_showAttribute
             // 
             this.bt_showAttribute.Name = "bt_showAttribute";
-            this.bt_showAttribute.Size = new System.Drawing.Size(152, 22);
+            this.bt_showAttribute.Size = new System.Drawing.Size(136, 22);
             this.bt_showAttribute.Text = "属性表";
             // 
             // 缩放到图层ToolStripMenuItem
             // 
             this.缩放到图层ToolStripMenuItem.Name = "缩放到图层ToolStripMenuItem";
-            this.缩放到图层ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.缩放到图层ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.缩放到图层ToolStripMenuItem.Text = "缩放到图层";
             // 
             // 移除图层ToolStripMenuItem
             // 
             this.移除图层ToolStripMenuItem.Name = "移除图层ToolStripMenuItem";
-            this.移除图层ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.移除图层ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
             this.移除图层ToolStripMenuItem.Text = "移除图层";
             // 
             // contextMenuStrip
@@ -441,21 +449,71 @@ namespace AEdemo1
             this.bt_showAttri,
             this.bt_deleteLayer});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(153, 70);
+            this.contextMenuStrip.Size = new System.Drawing.Size(125, 48);
             // 
             // bt_showAttri
             // 
             this.bt_showAttri.Name = "bt_showAttri";
-            this.bt_showAttri.Size = new System.Drawing.Size(152, 22);
+            this.bt_showAttri.Size = new System.Drawing.Size(124, 22);
             this.bt_showAttri.Text = "属性表";
             this.bt_showAttri.Click += new System.EventHandler(this.bt_showAttri_Click);
             // 
             // bt_deleteLayer
             // 
             this.bt_deleteLayer.Name = "bt_deleteLayer";
-            this.bt_deleteLayer.Size = new System.Drawing.Size(152, 22);
+            this.bt_deleteLayer.Size = new System.Drawing.Size(124, 22);
             this.bt_deleteLayer.Text = "移除图层";
             this.bt_deleteLayer.Click += new System.EventHandler(this.bt_deleteLayer_Click);
+            // 
+            // 查询ToolStripMenuItem
+            // 
+            this.查询ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bt_qAttri,
+            this.空间查询ToolStripMenuItem,
+            this.图形查询ToolStripMenuItem,
+            this.地图选择集ToolStripMenuItem,
+            this.统计ToolStripMenuItem,
+            this.选择操作选项ToolStripMenuItem});
+            this.查询ToolStripMenuItem.Name = "查询ToolStripMenuItem";
+            this.查询ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+            this.查询ToolStripMenuItem.Text = "查询";
+            // 
+            // bt_qAttri
+            // 
+            this.bt_qAttri.Name = "bt_qAttri";
+            this.bt_qAttri.Size = new System.Drawing.Size(152, 22);
+            this.bt_qAttri.Text = "属性查询";
+            this.bt_qAttri.Click += new System.EventHandler(this.bt_qAttri_Click);
+            // 
+            // 空间查询ToolStripMenuItem
+            // 
+            this.空间查询ToolStripMenuItem.Name = "空间查询ToolStripMenuItem";
+            this.空间查询ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.空间查询ToolStripMenuItem.Text = "空间查询";
+            // 
+            // 图形查询ToolStripMenuItem
+            // 
+            this.图形查询ToolStripMenuItem.Name = "图形查询ToolStripMenuItem";
+            this.图形查询ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.图形查询ToolStripMenuItem.Text = "图形查询";
+            // 
+            // 地图选择集ToolStripMenuItem
+            // 
+            this.地图选择集ToolStripMenuItem.Name = "地图选择集ToolStripMenuItem";
+            this.地图选择集ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.地图选择集ToolStripMenuItem.Text = "地图选择集";
+            // 
+            // 统计ToolStripMenuItem
+            // 
+            this.统计ToolStripMenuItem.Name = "统计ToolStripMenuItem";
+            this.统计ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.统计ToolStripMenuItem.Text = "统计";
+            // 
+            // 选择操作选项ToolStripMenuItem
+            // 
+            this.选择操作选项ToolStripMenuItem.Name = "选择操作选项ToolStripMenuItem";
+            this.选择操作选项ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.选择操作选项ToolStripMenuItem.Text = "选择操作选项";
             // 
             // Form1
             // 
@@ -532,6 +590,13 @@ namespace AEdemo1
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem bt_showAttri;
         private System.Windows.Forms.ToolStripMenuItem bt_deleteLayer;
+        private System.Windows.Forms.ToolStripMenuItem 查询ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem bt_qAttri;
+        private System.Windows.Forms.ToolStripMenuItem 空间查询ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 图形查询ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 地图选择集ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 统计ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 选择操作选项ToolStripMenuItem;
     }
 }
 

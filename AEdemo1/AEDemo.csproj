@@ -16,6 +16,7 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>发布\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -28,7 +29,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -139,6 +139,12 @@
     <Compile Include="FormExportMap.Designer.cs">
       <DependentUpon>FormExportMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="FormQueryByAttribute.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormQueryByAttribute.Designer.cs">
+      <DependentUpon>FormQueryByAttribute.cs</DependentUpon>
+    </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LicenseInitializer.cs" />
@@ -154,6 +160,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="FormExportMap.resx">
       <DependentUpon>FormExportMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="FormQueryByAttribute.resx">
+      <DependentUpon>FormQueryByAttribute.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
     <EmbeddedResource Include="Properties\Resources.resx">

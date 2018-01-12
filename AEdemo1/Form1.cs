@@ -975,6 +975,16 @@ namespace AEdemo1
 
         }
 
+        private void bt_qAttri_Click(object sender, EventArgs e)
+        {
+            //新建属性查询窗体
+            FormQueryByAttribute formQueryByAttribute = new FormQueryByAttribute();
+            //将当期那窗体的mapcontrol中的map对象赋值给formquerybyattribute窗体的currentmap属性
+            formQueryByAttribute.CurrentMap = mainMapControl.Map;
+            formQueryByAttribute.Show();
+
+        }
+
 
     }
 }
