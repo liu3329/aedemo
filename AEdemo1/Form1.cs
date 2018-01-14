@@ -13,7 +13,6 @@ using ESRI.ArcGIS.SystemUI;
 using ESRI.ArcGIS.Geodatabase;
 using ESRI.ArcGIS.DataSourcesFile;
 using ESRI.ArcGIS.DataSourcesRaster;
-using ESRI.ArcGIS.Controls;
 using ESRI.ArcGIS.Geometry;
 using ESRI.ArcGIS.DataSourcesGDB;
 using System.IO;
@@ -889,8 +888,7 @@ namespace AEdemo1
                 pTocFeatureLayer = pLayer as IFeatureLayer;
                 if (pItem == esriTOCControlItem.esriTOCControlItemLayer && pTocFeatureLayer != null)
                 {
-                    btnLayerSel.Enabled = !pTocFeatureLayer.Selectable;
-                    btnLayerUnSel.Enabled = pTocFeatureLayer.Selectable;
+                   
                     contextMenuStrip.Show(Control.MousePosition);//右键单击菜单在鼠标的位置显示
                 }
             }
@@ -972,7 +970,6 @@ namespace AEdemo1
             }
             mainMapControl.ActiveView.Refresh();
 
-
         }
 
         private void bt_qAttri_Click(object sender, EventArgs e)
@@ -985,6 +982,159 @@ namespace AEdemo1
 
         }
 
+        private void 空间查询ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //新建属性查询窗体
+            FormQueryBySpatial formQueryBySpatial = new FormQueryBySpatial();
+            formQueryBySpatial.CurrentMap = mainMapControl.Map;
+            formQueryBySpatial.Show();
+        }
 
+        private void 图形查询ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //清空地图选择集以进行后续的选择操作
+            mainMapControl.Map.FeatureSelection.Clear();
+            //使用igraphicsContainer接口获取地图中的各个图形
+            IGraphicsContainer graphicsContainer = mainMapControl.Map as IGraphicsContainer;
+            //重置访问图形的游标，使igraphicscontainer接口的next（）方法定位地图中的第一个图形
+            graphicsContainer.Reset();
+            //使用ielement接口获取第一个图形
+            IElement element = graphicsContainer.Next();
+            //获取图形的几何信息
+            IGeometry geometry = element.Geometry;
+            //使用第一个图形的几何形状来选择地图中的要素
+            mainMapControl.Map.SelectByShape(geometry,null,false);
+            //进行部分刷新
+            mainMapControl.ActiveView.PartialRefresh(esriViewDrawPhase.esriViewGeoSelection,null,mainMapControl.ActiveView.Extent);
+
+        }
+
+
+
+
+
+
+        /// <summary>
+        /// 输入rgb值，获取irgbcolor型值
+        /// </summary>
+        /// <returns></returns>
+        private IRgbColor GetRgbColor(int intR, int intG, int intB)
+        {
+            IRgbColor pRgbColor = null;
+            if (intR < 0 || intR > 255 || intG < 0 || intG > 255 || intB < 0 || intB > 255)
+            {
+                return pRgbColor;
+            }
+            else
+            {
+                pRgbColor = new RgbColorClass();
+                pRgbColor.Red = intR;
+                pRgbColor.Green = intG;
+                pRgbColor.Blue = intB;
+                return pRgbColor;
+            }
+        }
+
+        private void 点状要素符号化ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //获取目标图层
+            ILayer pLayer = new FeatureLayerClass();
+            pLayer = mainMapControl.get_Layer(0);
+            IGeoFeatureLayer pGeoFeatLyr = pLayer as IGeoFeatureLayer;//提供对功能层的地理方面的访问。
+            //设置点符号
+            ISimpleMarkerSymbol pMarkerSymbol = new SimpleMarkerSymbol();
+            pMarkerSymbol.Style = esriSimpleMarkerStyle.esriSMSSquare;//设置点符号样式为方形
+            //设置点符号颜色
+            IRgbColor pRgbColor = new RgbColor();
+            pRgbColor = GetRgbColor(255,100,100);
+            pMarkerSymbol.Color = pRgbColor;
+            ISymbol pSymbol = (ISymbol)pMarkerSymbol;//控制符号类
+            //更改符号样式
+            ISimpleRenderer pSimpleRender = new SimpleRendererClass();//控制一个渲染器，它为每个特性绘制相同的符号。
+            pSimpleRender.Symbol = pSymbol;
+            pGeoFeatLyr.Renderer = pSimpleRender as IFeatureRenderer;
+            mainMapControl.Refresh();
+            axTOCControl.Update();
+
+        }
+
+        private void 线状要素符号化ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //获取目标图层
+            ILayer pLayer = new FeatureLayerClass();
+            pLayer = mainMapControl.get_Layer(1);
+            IGeoFeatureLayer pGeoFeatLyr = pLayer as IGeoFeatureLayer;
+            //设置线符号
+            IHashLineSymbol pHashLineSymbol = new HashLineSymbolClass();
+            ILineProperties pLineProperties = pHashLineSymbol as ILineProperties;
+            pLineProperties.Offset = 0;
+            double[] dob = new double[6];
+            dob[0] = 0;
+            dob[1] = 1;
+            dob[2] = 2;
+            dob[3] = 3;
+            dob[4] = 4;
+            dob[5] = 5;
+            //过滤器
+            ITemplate pTemplate = new TemplateClass();
+            pTemplate.Interval = 1;//模板间隔
+            for (int i = 0; i < dob.Length; i+= 2)
+            {
+                pTemplate.AddPatternElement(dob[i],dob[i + 1]);
+            }
+            pLineProperties.Template = pTemplate;
+            pHashLineSymbol.Width = 2;
+            pHashLineSymbol.Angle = 45;//设置单一线段的倾斜角度
+            IRgbColor pColor = new RgbColor();
+            pColor = GetRgbColor(0,0,255);
+            pHashLineSymbol.Color = pColor;
+            //更改符号样式
+            ISimpleRenderer pSimpleRender = new SimpleRendererClass();
+            pSimpleRender.Symbol = pHashLineSymbol as ISymbol;
+            pGeoFeatLyr.Renderer = pSimpleRender as IFeatureRenderer;
+            mainMapControl.Refresh();
+            axTOCControl.Update();
+
+        }
+
+        private void 面状要素符号化ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //获取目标图层
+            ILayer pLayer = new FeatureLayerClass();
+            pLayer = mainMapControl.get_Layer(2);
+            IGeoFeatureLayer pGeoFeatLyr = pLayer as IGeoFeatureLayer;
+            //设置渐变色填充面符号
+            IMultiLayerFillSymbol pMultiLayerFillSymbol = new MultiLayerFillSymbolClass();
+            IGradientFillSymbol pGraientFillSymbol = new GradientFillSymbolClass();
+            //颜色渐变  -----一个由两种颜色定义的颜色渐变和算法，用来穿越中间的颜色空间
+            IAlgorithmicColorRamp pAlgorithcColorRamp = new AlgorithmicColorRampClass();//一个由两种颜色定义的颜色渐变和算法，用来穿越中间的颜色空间
+            pAlgorithcColorRamp.FromColor = GetRgbColor(255,0,0);
+            pAlgorithcColorRamp.ToColor = GetRgbColor(0,255,0);
+            pAlgorithcColorRamp.Algorithm = esriColorRampAlgorithm.esriHSVAlgorithm;//简便算法使用hsva算计
+            pGraientFillSymbol.ColorRamp = pAlgorithcColorRamp;//符号的渐变属性
+            pGraientFillSymbol.GradientAngle = 45;//填补梯度的方向。
+            pGraientFillSymbol.GradientPercentage = 0.9;//梯度比例--在颜色渐变中控制颜色的数量
+            pGraientFillSymbol.Style = esriGradientFillStyle.esriGFSLinear;//填充风格 ---线性渐变填充风格。
+            //设置线填充面符号
+            ISimpleLineSymbol pSimpleLineSymbol = new SimpleLineSymbolClass();
+            pSimpleLineSymbol.Style = esriSimpleLineStyle.esriSLSDashDotDot;
+            pSimpleLineSymbol.Width = 2;
+            IRgbColor pRgbColor = GetRgbColor(255,0,0);
+            pSimpleLineSymbol.Color = pRgbColor;
+            ILineFillSymbol pLineFillSymbol = new LineFillSymbol();
+            pLineFillSymbol.Angle = 45;//填入线符号角
+            pLineFillSymbol.Separation = 10;//行符号分隔符。
+            pLineFillSymbol.Offset = 5;
+            pLineFillSymbol.LineSymbol = pSimpleLineSymbol;
+            //组合填充符号
+            pMultiLayerFillSymbol.AddLayer(pGraientFillSymbol);
+            pMultiLayerFillSymbol.AddLayer(pLineFillSymbol);
+            //更改符号样式
+            ISimpleRenderer pSimpleRender = new SimpleRendererClass();
+            pSimpleRender.Symbol = pMultiLayerFillSymbol as ISymbol;
+            pGeoFeatLyr.Renderer = pSimpleRender as IFeatureRenderer;
+            mainMapControl.Refresh();
+            axTOCControl.Update();
+        }
     }
 }
